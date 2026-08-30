@@ -27,11 +27,16 @@ async function setup() {
     }
 
     // 2. Create Products Collection
+    // Helper to safely add attributes
+    const safeAttr = async (fn, ...args) => {
+        try { await fn(...args); console.log(`  + Attribute '${args[2]}' configured`); } 
+        catch (e) { console.log(`  ℹ Attribute '${args[2]}': ${e.message}`); }
+    };
+
+    // 2. Products Collection
     try {
         await databases.createCollection(
-            DB_ID,
-            'products',
-            'Products',
+            DB_ID, 'products', 'Products',
             [
                 Permission.read(Role.any()),
                 Permission.create(Role.users()),
@@ -40,30 +45,27 @@ async function setup() {
             ]
         );
         console.log('✅ Collection "products" created');
-
-        // Attributes for products
-        await databases.createStringAttribute(DB_ID, 'products', 'name', 255, true);
-        await databases.createStringAttribute(DB_ID, 'products', 'category', 100, true);
-        await databases.createFloatAttribute(DB_ID, 'products', 'price', true);
-        await databases.createStringAttribute(DB_ID, 'products', 'description', 1000, false);
-        await databases.createStringAttribute(DB_ID, 'products', 'imageId', 255, false);
-        await databases.createStringAttribute(DB_ID, 'products', 'imageUrl', 500, false);
-        await databases.createBooleanAttribute(DB_ID, 'products', 'featured', true, false);
-        await databases.createBooleanAttribute(DB_ID, 'products', 'bestCollection', true, false);
-        await databases.createBooleanAttribute(DB_ID, 'products', 'available', true, true);
-        await databases.createIntegerAttribute(DB_ID, 'products', 'views', false, 0, 999999, 0);
-        await databases.createStringAttribute(DB_ID, 'products', 'createdAt', 100, false);
-        console.log('✅ All "products" attributes created');
     } catch (e) {
-        console.log('ℹ️ Products collection setup note:', e.message);
+        console.log('ℹ️ Products collection note:', e.message);
     }
 
-    // 3. Create Custom Requests Collection
+    // Products Attributes
+    await safeAttr(databases.createStringAttribute.bind(databases), DB_ID, 'products', 'name', 255, true);
+    await safeAttr(databases.createStringAttribute.bind(databases), DB_ID, 'products', 'category', 100, true);
+    await safeAttr(databases.createFloatAttribute.bind(databases), DB_ID, 'products', 'price', true);
+    await safeAttr(databases.createStringAttribute.bind(databases), DB_ID, 'products', 'description', 2000, false);
+    await safeAttr(databases.createStringAttribute.bind(databases), DB_ID, 'products', 'imageId', 255, false);
+    await safeAttr(databases.createStringAttribute.bind(databases), DB_ID, 'products', 'imageUrl', 1000, false);
+    await safeAttr(databases.createBooleanAttribute.bind(databases), DB_ID, 'products', 'featured', false, false);
+    await safeAttr(databases.createBooleanAttribute.bind(databases), DB_ID, 'products', 'bestCollection', false, false);
+    await safeAttr(databases.createBooleanAttribute.bind(databases), DB_ID, 'products', 'available', false, true);
+    await safeAttr(databases.createIntegerAttribute.bind(databases), DB_ID, 'products', 'views', false, 0, 999999, 0);
+    await safeAttr(databases.createStringAttribute.bind(databases), DB_ID, 'products', 'createdAt', 100, false);
+
+    // 3. Custom Requests Collection
     try {
         await databases.createCollection(
-            DB_ID,
-            'custom_requests',
-            'Custom Requests',
+            DB_ID, 'custom_requests', 'Custom Requests',
             [
                 Permission.create(Role.any()),
                 Permission.read(Role.users()),
@@ -72,20 +74,20 @@ async function setup() {
             ]
         );
         console.log('✅ Collection "custom_requests" created');
-
-        // Attributes for custom_requests
-        await databases.createStringAttribute(DB_ID, 'custom_requests', 'name', 255, true);
-        await databases.createStringAttribute(DB_ID, 'custom_requests', 'phone', 20, true);
-        await databases.createStringAttribute(DB_ID, 'custom_requests', 'email', 255, false);
-        await databases.createStringAttribute(DB_ID, 'custom_requests', 'category', 100, false);
-        await databases.createStringAttribute(DB_ID, 'custom_requests', 'request', 255, false);
-        await databases.createStringAttribute(DB_ID, 'custom_requests', 'message', 1000, false);
-        await databases.createStringAttribute(DB_ID, 'custom_requests', 'status', 50, false, 'pending');
-        await databases.createStringAttribute(DB_ID, 'custom_requests', 'createdAt', 100, false);
-        console.log('✅ All "custom_requests" attributes created');
     } catch (e) {
-        console.log('ℹ️ Custom requests collection setup note:', e.message);
+        console.log('ℹ️ Custom requests collection note:', e.message);
     }
+
+    // Custom Requests Attributes
+    await safeAttr(databases.createStringAttribute.bind(databases), DB_ID, 'custom_requests', 'name', 255, true);
+    await safeAttr(databases.createStringAttribute.bind(databases), DB_ID, 'custom_requests', 'phone', 20, true);
+    await safeAttr(databases.createStringAttribute.bind(databases), DB_ID, 'custom_requests', 'email', 255, false);
+    await safeAttr(databases.createStringAttribute.bind(databases), DB_ID, 'custom_requests', 'category', 100, false);
+    await safeAttr(databases.createStringAttribute.bind(databases), DB_ID, 'custom_requests', 'request', 255, false);
+    await safeAttr(databases.createStringAttribute.bind(databases), DB_ID, 'custom_requests', 'message', 1000, false);
+    await safeAttr(databases.createStringAttribute.bind(databases), DB_ID, 'custom_requests', 'status', 50, false, 'pending');
+    await safeAttr(databases.createStringAttribute.bind(databases), DB_ID, 'custom_requests', 'createdAt', 100, false);
+
 
     // 4. Create Storage Bucket
     try {

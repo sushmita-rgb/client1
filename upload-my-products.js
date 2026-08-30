@@ -12,7 +12,7 @@ const client = new Client()
 
 const databases = new Databases(client);
 
-async function cleanAndUploadProducts() {
+async function revertAndUploadOriginalOrder() {
     console.log('🧹 Clearing existing products from Appwrite...');
     try {
         const existing = await databases.listDocuments('riza_db', 'products', [Query.limit(100)]);
@@ -24,14 +24,9 @@ async function cleanAndUploadProducts() {
         console.log('ℹ️ Clearing step note:', e.message);
     }
 
-    const reversedList = [...INITIAL_PRODUCTS].reverse();
-    console.log(`📦 Re-uploading ${reversedList.length} products in sequence (Product #1 latest)...`);
+    console.log(`📦 Uploading ${INITIAL_PRODUCTS.length} products in original order (Product #1 -> #22)...`);
 
-    const now = Date.now();
-    for (let index = 0; index < reversedList.length; index++) {
-        const p = reversedList[index];
-        // Give higher timestamp index to Product #1 so it stays at the top in Newest First view
-        const itemDate = new Date(now + index * 1000).toISOString();
+    for (const p of INITIAL_PRODUCTS) {
         try {
             await databases.createDocument(
                 'riza_db',
@@ -48,7 +43,7 @@ async function cleanAndUploadProducts() {
                     bestCollection: Boolean(p.bestCollection),
                     available: p.available !== undefined ? Boolean(p.available) : true,
                     views: Number(p.views) || 0,
-                    createdAt: itemDate
+                    createdAt: p.createdAt || new Date().toISOString()
                 }
             );
             console.log(`✅ Uploaded: [${p.category}] ${p.name}`);
@@ -56,7 +51,7 @@ async function cleanAndUploadProducts() {
             console.log(`❌ Failed ${p.name}:`, e.message);
         }
     }
-    console.log('🎉 Re-upload completed! Product #1 is now at the top of Appwrite Console.');
+    console.log('🎉 Successfully reverted! All products uploaded in original order.');
 }
 
-cleanAndUploadProducts();
+revertAndUploadOriginalOrder();

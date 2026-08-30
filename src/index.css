@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+@theme {
+  --font-serif: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+  --font-sans: 'Outfit', 'Inter', sans-serif;
+
+  --color-riza-pastel-50: #F5F9FC;
+  --color-riza-pastel-100: #EBF3FA;
+  --color-riza-pastel-200: #D4E4F7;
+  --color-riza-pastel-300: #B8D4F0;
+  --color-riza-pastel-400: #94BEFA;
+  --color-riza-pastel-500: #6FA3EA;
+
+  --color-riza-powder: #C5DDF5;
+  --color-riza-cream-50: #FFFDF9;
+  --color-riza-cream-100: #FAF7F2;
+  --color-riza-cream-200: #F4EFE6;
+  --color-riza-cream-300: #EBE3D5;
+  
+  --color-riza-ivory: #FFFDF9;
+  --color-riza-beige: #F2ECE4;
+
+  --color-riza-slate-100: #E2E8F0;
+  --color-riza-slate-500: #64748B;
+  --color-riza-slate-600: #5C728A;
+  --color-riza-slate-700: #4A607A;
+  --color-riza-slate-800: #2C3E50;
+  --color-riza-slate-900: #1E293B;
+
+  --color-riza-gold-500: #E5C158;
+  --color-riza-gold-600: #D4AF37;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    font-family: var(--font-sans);
+  }
+  
+  body {
+    background-color: #FAF7F2;
+    color: #2C3E50;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, .font-serif {
+    font-family: 'Cormorant Garamond', 'Playfair Display', serif;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #FAF7F2;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #D4E4F7;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #B8D4F0;
+}
+
+/* Glassmorphism Effect */
+.glass-panel {
+  background: rgba(255, 253, 249, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(212, 228, 247, 0.4);
+}
+
+.glass-nav {
+  background: rgba(250, 247, 242, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(235, 227, 213, 0.6);
+}
+
+/* Shadow utilities */
+.shadow-soft {
+  box-shadow: 0 8px 30px -4px rgba(92, 114, 138, 0.08);
+}
+.shadow-soft-sm {
+  box-shadow: 0 2px 8px -2px rgba(92, 114, 138, 0.06);
+}
+.shadow-soft-lg {
+  box-shadow: 0 16px 40px -6px rgba(92, 114, 138, 0.12);
+}

@@ -30,16 +30,6 @@ export default function LoginPage() {
     }
   };
 
-  const handleQuickAdminLogin = async () => {
-    try {
-      await login('aurellecharmsss.gmail.com', 'aurellecharmsss4044');
-      navigate('/admin');
-    } catch (e) {
-      toggleDemoAdmin();
-      navigate('/admin');
-    }
-  };
-
   return (
     <div className="min-h-[80vh] bg-[#FAF7F2] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8 bg-[#FFFDF9] p-8 sm:p-10 rounded-2xl border border-[#EBE3D5] shadow-soft-lg">
@@ -117,17 +107,9 @@ export default function LoginPage() {
           </button>
         </form>
 
-        {/* Admin Quick Test Bypass */}
-        <div className="pt-4 border-t border-[#FAF7F2] space-y-3">
-          <button
-            onClick={handleQuickAdminLogin}
-            className="w-full text-center text-xs font-medium text-[#4A607A] bg-[#EBF3FA] hover:bg-[#D4E4F7] py-2.5 rounded-xl border border-[#B8D4F0] flex items-center justify-center transition-colors"
-          >
-            <ShieldCheck className="w-4 h-4 mr-2 text-[#D4AF37]" />
-            Sign In as Store Owner / Admin
-          </button>
-          
-          <p className="text-center text-xs text-[#5C728A]">
+        {/* Account Signup Link */}
+        <div className="pt-4 border-t border-[#FAF7F2] text-center">
+          <p className="text-xs text-[#5C728A]">
             Don't have an account?{' '}
             <Link to="/signup" className="font-semibold text-[#2C3E50] underline">
               Sign Up

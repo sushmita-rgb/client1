@@ -57,22 +57,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Demo Admin switcher helper for testing
-  const toggleDemoAdmin = () => {
-    if (user && user.isAdmin) {
-      setUser({ ...user, isAdmin: false });
-    } else {
-      const adminUser = {
-        $id: 'usr-admin-demo',
-        email: 'admin@aurellecharmsss.com',
-        name: 'AurelleCharmsss Owner Admin',
-        isAdmin: true,
-      };
-      setUser(adminUser);
-      localStorage.setItem('aurellecharmsss_local_user', JSON.stringify(adminUser));
-    }
-  };
-
   return (
     <AuthContext.Provider
       value={{
@@ -82,7 +66,6 @@ export const AuthProvider = ({ children }) => {
         login,
         signup,
         logout,
-        toggleDemoAdmin,
         checkUser,
       }}
     >

@@ -501,6 +501,10 @@ export const appwriteService = {
     const cleanEmail = email ? email.toLowerCase().trim() : '';
     const cleanPassword = password ? password.trim() : '';
 
+    if (!cleanEmail || !cleanPassword) {
+      throw new Error('Please enter both your email address and password to sign in.');
+    }
+
     const isAdminCreds =
       (cleanEmail === 'aurellecharmsss.gmail.com' ||
        cleanEmail === 'aurellecharmsss@gmail.com' ||
@@ -509,24 +513,30 @@ export const appwriteService = {
 
     if (isAppwriteConfigured()) {
       try {
-        return await account.createEmailPasswordSession(email, password);
+        return await account.createEmailPasswordSession(cleanEmail, cleanPassword);
       } catch (err) {
         if (!isAdminCreds) {
-          throw new Error(err.message);
+          throw new Error(err.message || 'Invalid email address or password.');
         }
       }
     }
 
-    const isAdmin =
-      isAdminCreds ||
-      cleanEmail.includes('admin') ||
-      cleanPassword === 'aurellecharmsss4044';
+    if (isAdminCreds) {
+      const user = {
+        $id: 'usr-admin-' + Date.now(),
+        email: cleanEmail,
+        name: 'AURELLECHARMSSS ADMIN',
+        isAdmin: true,
+      };
+      localStorage.setItem(LOCAL_USER_KEY, JSON.stringify(user));
+      return user;
+    }
 
     const user = {
       $id: 'usr-' + Date.now(),
       email: cleanEmail,
-      name: isAdmin ? 'AURELLECHARMSSS ADMIN' : (cleanEmail.split('@')[0] || 'User').toUpperCase(),
-      isAdmin,
+      name: (cleanEmail.split('@')[0] || 'User').toUpperCase(),
+      isAdmin: false,
     };
     localStorage.setItem(LOCAL_USER_KEY, JSON.stringify(user));
     return user;

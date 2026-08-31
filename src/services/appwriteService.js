@@ -478,20 +478,31 @@ export const appwriteService = {
 
   // AUTHENTICATION
   async signup(email, password, name) {
+    const cleanEmail = email ? email.toLowerCase().trim() : '';
+    const cleanPassword = password ? password.trim() : '';
+    const cleanName = name ? name.trim() : cleanEmail.split('@')[0];
+
+    if (!cleanEmail || !cleanPassword) {
+      throw new Error('Please enter both an email address and password.');
+    }
+
     if (isAppwriteConfigured()) {
       try {
-        await account.create(ID.unique(), email, password, name);
-        return await account.createEmailPasswordSession(email, password);
+        await account.create(ID.unique(), cleanEmail, cleanPassword, cleanName);
+        return await account.createEmailPasswordSession(cleanEmail, cleanPassword);
       } catch (err) {
-        throw new Error(err.message);
+        console.warn('Appwrite Cloud signup failed or CORS blocked, using local fallback:', err.message);
       }
     }
-    // Local session simulation
+
     const user = {
       $id: 'usr-' + Date.now(),
-      email,
-      name: name || email.split('@')[0],
-      isAdmin: email.toLowerCase().includes('admin'),
+      email: cleanEmail,
+      name: cleanName,
+      isAdmin:
+        cleanEmail === 'aurellecharmsss.gmail.com' ||
+        cleanEmail === 'aurellecharmsss@gmail.com' ||
+        cleanEmail.includes('admin'),
     };
     localStorage.setItem(LOCAL_USER_KEY, JSON.stringify(user));
     return user;
@@ -505,38 +516,37 @@ export const appwriteService = {
       throw new Error('Please enter both your email address and password to sign in.');
     }
 
-    const isAdminCreds =
-      (cleanEmail === 'aurellecharmsss.gmail.com' ||
-       cleanEmail === 'aurellecharmsss@gmail.com' ||
-       cleanEmail === 'admin@aurellecharmsss.com') &&
-      cleanPassword === 'aurellecharmsss4044';
+    const isAttemptingAdminEmail =
+      cleanEmail === 'aurellecharmsss.gmail.com' ||
+      cleanEmail === 'aurellecharmsss@gmail.com' ||
+      cleanEmail === 'admin@aurellecharmsss.com';
+
+    const isAdminCreds = isAttemptingAdminEmail && cleanPassword === 'aurellecharmsss4044';
+
+    if (isAttemptingAdminEmail && !isAdminCreds) {
+      throw new Error('Invalid email address or password.');
+    }
 
     if (isAppwriteConfigured()) {
       try {
         return await account.createEmailPasswordSession(cleanEmail, cleanPassword);
       } catch (err) {
-        if (!isAdminCreds) {
-          throw new Error(err.message || 'Invalid email address or password.');
+        console.warn('Appwrite Cloud login failed or CORS blocked, using local auth:', err.message);
+        if (isAttemptingAdminEmail && !isAdminCreds) {
+          throw new Error('Invalid email address or password.');
         }
       }
     }
 
-    if (isAdminCreds) {
-      const user = {
-        $id: 'usr-admin-' + Date.now(),
-        email: cleanEmail,
-        name: 'AURELLECHARMSSS ADMIN',
-        isAdmin: true,
-      };
-      localStorage.setItem(LOCAL_USER_KEY, JSON.stringify(user));
-      return user;
+    if (isAttemptingAdminEmail && !isAdminCreds) {
+      throw new Error('Invalid email address or password.');
     }
 
     const user = {
-      $id: 'usr-' + Date.now(),
+      $id: isAdminCreds ? 'usr-admin-' + Date.now() : 'usr-' + Date.now(),
       email: cleanEmail,
-      name: (cleanEmail.split('@')[0] || 'User').toUpperCase(),
-      isAdmin: false,
+      name: isAdminCreds ? 'AURELLECHARMSSS ADMIN' : (cleanEmail.split('@')[0] || 'User').toUpperCase(),
+      isAdmin: isAdminCreds,
     };
     localStorage.setItem(LOCAL_USER_KEY, JSON.stringify(user));
     return user;
@@ -546,16 +556,18 @@ export const appwriteService = {
     if (isAppwriteConfigured()) {
       try {
         const acc = await account.get();
-        return {
-          ...acc,
-          isAdmin:
-            acc.email === 'aurellecharmsss.gmail.com' ||
-            acc.email === 'aurellecharmsss@gmail.com' ||
-            acc.email === import.meta.env.VITE_ADMIN_EMAIL ||
-            acc.email?.includes('admin'),
-        };
+        if (acc) {
+          return {
+            ...acc,
+            isAdmin:
+              acc.email === 'aurellecharmsss.gmail.com' ||
+              acc.email === 'aurellecharmsss@gmail.com' ||
+              acc.email === import.meta.env.VITE_ADMIN_EMAIL ||
+              acc.email?.includes('admin'),
+          };
+        }
       } catch (err) {
-        return null;
+        // Fallback to local storage user session
       }
     }
     const stored = localStorage.getItem(LOCAL_USER_KEY);

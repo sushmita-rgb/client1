@@ -118,24 +118,24 @@ export default function ProductDetailPage() {
           </div>
 
           {/* RIGHT: Product Info & Actions */}
-          <div className="space-y-8 bg-[#FFFDF9] p-8 sm:p-10 rounded-2xl border border-[#EBE3D5] shadow-soft-sm">
+          <div className="space-y-6 sm:space-y-8 bg-[#FFFDF9] p-5 sm:p-8 lg:p-10 rounded-2xl border border-[#EBE3D5] shadow-soft-sm">
             <div>
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-semibold tracking-widest text-[#4A607A] uppercase bg-[#EBF3FA] px-3 py-1 rounded-full border border-[#B8D4F0]">
+              <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+                <span className="text-[11px] sm:text-xs font-semibold tracking-widest text-[#4A607A] uppercase bg-[#EBF3FA] px-3 py-1 rounded-full border border-[#B8D4F0]">
                   {product.category}
                 </span>
                 {product.available ? (
-                  <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
+                  <span className="text-[10px] sm:text-xs font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
                     IN STOCK & READY TO SHIP
                   </span>
                 ) : (
-                  <span className="text-xs font-semibold text-rose-600 bg-rose-50 px-2.5 py-1 rounded-full border border-rose-200">
+                  <span className="text-[10px] sm:text-xs font-semibold text-rose-600 bg-rose-50 px-2.5 py-1 rounded-full border border-rose-200">
                     MADE TO ORDER
                   </span>
                 )}
               </div>
 
-              <h1 className="font-serif text-3xl sm:text-4xl text-[#2C3E50] font-normal leading-tight">
+              <h1 className="font-serif text-2xl sm:text-4xl text-[#2C3E50] font-normal leading-tight">
                 {product.name}
               </h1>
 
@@ -185,9 +185,9 @@ export default function ProductDetailPage() {
                     target="_blank"
                     rel="noreferrer"
                     onClick={() => setInquirySent(true)}
-                    className="flex-1 inline-flex items-center justify-center text-xs tracking-widest uppercase font-semibold text-white bg-[#4A607A] hover:bg-[#2C3E50] py-4 px-6 rounded-full shadow-soft hover:shadow-soft-lg transition-all duration-300"
+                    className="flex-1 inline-flex items-center justify-center text-[11px] sm:text-xs tracking-wider sm:tracking-widest uppercase font-semibold text-white bg-[#4A607A] hover:bg-[#2C3E50] py-3.5 px-4 sm:px-6 rounded-full shadow-soft hover:shadow-soft-lg transition-all duration-300 text-center"
                   >
-                    <Phone className="w-4 h-4 mr-2" />
+                    <Phone className="w-4 h-4 mr-2 shrink-0" />
                     <span>INQUIRE / ORDER ON WHATSAPP</span>
                   </a>
                 </div>

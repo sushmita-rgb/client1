@@ -35,12 +35,20 @@
   html {
     scroll-behavior: smooth;
     font-family: var(--font-sans);
+    overflow-x: hidden;
+    max-width: 100vw;
   }
   
   body {
     background-color: #FAF7F2;
     color: #2C3E50;
     overflow-x: hidden;
+    max-width: 100vw;
+  }
+
+  #root {
+    overflow-x: hidden;
+    max-width: 100vw;
   }
 
   h1, h2, h3, h4, .font-serif {

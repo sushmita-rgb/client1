@@ -26,20 +26,20 @@ export default function Navbar() {
     <>
       <header className="sticky top-0 z-40 w-full glass-nav transition-all duration-300">
         {/* Top announcement bar */}
-        <div className="bg-[#EBF3FA] py-1.5 px-4 text-center text-xs tracking-wider text-[#4A607A] font-medium border-b border-[#D0E2F3]">
+        <div className="bg-[#EBF3FA] py-1.5 px-2 sm:px-4 text-center text-[10px] sm:text-xs tracking-wider text-[#4A607A] font-medium border-b border-[#D0E2F3] truncate">
           ✨ FREE SHIPPING ON ORDERS OVER ₹999 &nbsp;|&nbsp; HANDCRAFTED WITH LOVE
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* 3-column grid: Brand | Nav | Actions */}
-          <div className="grid grid-cols-3 items-center h-20">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+          {/* Header Bar: Flex on mobile, 3-col grid on desktop */}
+          <div className="flex items-center justify-between md:grid md:grid-cols-3 h-16 sm:h-20">
 
             {/* LEFT — Brand */}
-            <Link to="/" className="flex flex-col group w-fit">
-              <span className="font-serif text-xl sm:text-2xl tracking-widest text-[#2C3E50] font-semibold group-hover:text-[#4A607A] transition-colors">
+            <Link to="/" className="flex flex-col group shrink min-w-0 pr-2">
+              <span className="font-serif text-base sm:text-xl md:text-2xl tracking-wider sm:tracking-widest text-[#2C3E50] font-semibold group-hover:text-[#4A607A] transition-colors truncate">
                 AURELLECHARMSSS
               </span>
-              <span className="text-[9px] sm:text-[10px] tracking-super-wide text-[#5C728A] font-medium uppercase -mt-1">
+              <span className="text-[8px] sm:text-[10px] tracking-widest sm:tracking-super-wide text-[#5C728A] font-medium uppercase -mt-0.5 sm:-mt-1 truncate">
                 HANDMADE WITH LOVE
               </span>
             </Link>

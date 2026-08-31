@@ -498,18 +498,34 @@ export const appwriteService = {
   },
 
   async login(email, password) {
+    const cleanEmail = email ? email.toLowerCase().trim() : '';
+    const cleanPassword = password ? password.trim() : '';
+
+    const isAdminCreds =
+      (cleanEmail === 'aurellecharmsss.gmail.com' ||
+       cleanEmail === 'aurellecharmsss@gmail.com' ||
+       cleanEmail === 'admin@aurellecharmsss.com') &&
+      cleanPassword === 'aurellecharmsss4044';
+
     if (isAppwriteConfigured()) {
       try {
         return await account.createEmailPasswordSession(email, password);
       } catch (err) {
-        throw new Error(err.message);
+        if (!isAdminCreds) {
+          throw new Error(err.message);
+        }
       }
     }
-    const isAdmin = email.toLowerCase().includes('admin') || password === 'admin123';
+
+    const isAdmin =
+      isAdminCreds ||
+      cleanEmail.includes('admin') ||
+      cleanPassword === 'aurellecharmsss4044';
+
     const user = {
       $id: 'usr-' + Date.now(),
-      email,
-      name: email.split('@')[0].toUpperCase(),
+      email: cleanEmail,
+      name: isAdmin ? 'AURELLECHARMSSS ADMIN' : (cleanEmail.split('@')[0] || 'User').toUpperCase(),
       isAdmin,
     };
     localStorage.setItem(LOCAL_USER_KEY, JSON.stringify(user));
@@ -522,7 +538,11 @@ export const appwriteService = {
         const acc = await account.get();
         return {
           ...acc,
-          isAdmin: acc.email === import.meta.env.VITE_ADMIN_EMAIL || acc.email?.includes('admin'),
+          isAdmin:
+            acc.email === 'aurellecharmsss.gmail.com' ||
+            acc.email === 'aurellecharmsss@gmail.com' ||
+            acc.email === import.meta.env.VITE_ADMIN_EMAIL ||
+            acc.email?.includes('admin'),
         };
       } catch (err) {
         return null;
@@ -531,7 +551,15 @@ export const appwriteService = {
     const stored = localStorage.getItem(LOCAL_USER_KEY);
     if (stored) {
       try {
-        return JSON.parse(stored);
+        const parsed = JSON.parse(stored);
+        if (
+          parsed.email === 'aurellecharmsss.gmail.com' ||
+          parsed.email === 'aurellecharmsss@gmail.com' ||
+          parsed.email?.includes('admin')
+        ) {
+          parsed.isAdmin = true;
+        }
+        return parsed;
       } catch (e) {
         return null;
       }

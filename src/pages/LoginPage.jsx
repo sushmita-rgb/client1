@@ -32,7 +32,9 @@ export default function LoginPage() {
 
   const handleQuickAdminLogin = async () => {
     try {
-      await login('admin@aurellecharmsss.com', 'admin123');
+      setEmail('aurellecharmsss.gmail.com');
+      setPassword('aurellecharmsss4044');
+      await login('aurellecharmsss.gmail.com', 'aurellecharmsss4044');
       navigate('/admin');
     } catch (e) {
       toggleDemoAdmin();

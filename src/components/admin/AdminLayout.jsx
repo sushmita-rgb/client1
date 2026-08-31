@@ -28,39 +28,36 @@ export default function AdminLayout({ children }) {
       )}
 
       {/* Main Admin Content Container */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
+      <div className="flex-1 flex flex-col min-w-0 max-w-full overflow-x-hidden">
         {/* Top Header Bar */}
-        <header className="bg-white border-b border-slate-200 px-4 sm:px-8 py-3.5 flex items-center justify-between sticky top-0 z-30 shadow-sm">
-          <div className="flex items-center space-x-3">
+        <header className="bg-white border-b border-slate-200 px-3 sm:px-6 py-3 flex items-center justify-between sticky top-0 z-30 shadow-sm max-w-full overflow-hidden">
+          <div className="flex items-center space-x-2 sm:space-x-3 shrink min-w-0 pr-2">
             <button
               onClick={() => setIsMobileSidebarOpen(true)}
-              className="lg:hidden p-2 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors"
+              className="lg:hidden p-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors shrink-0"
               aria-label="Open mobile navigation menu"
             >
               <Menu className="w-5 h-5" />
             </button>
-            <div>
-              <h2 className="font-serif text-lg sm:text-xl text-slate-800 font-semibold truncate">
-                AurelleCharmsss Control Panel
+            <div className="min-w-0 truncate">
+              <h2 className="font-serif text-base sm:text-xl text-slate-800 font-bold truncate">
+                Admin Dashboard
               </h2>
-              <p className="text-[11px] sm:text-xs text-slate-500 hidden sm:block">
-                Manage products, custom requests, analytics & store configuration
-              </p>
             </div>
           </div>
 
-          <div className="flex items-center space-x-3">
-            <div className="flex items-center space-x-2 bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200">
+          <div className="flex items-center space-x-2 shrink-0">
+            <div className="flex items-center space-x-1.5 bg-slate-100 px-2.5 py-1 rounded-full border border-slate-200">
               <ShieldCheck className="w-4 h-4 text-[#D4AF37] shrink-0" />
-              <span className="text-xs font-semibold text-slate-700 truncate max-w-[110px] sm:max-w-none">
-                {user?.name || user?.email || 'Store Owner'}
+              <span className="text-xs font-semibold text-slate-700 hidden sm:inline truncate max-w-[120px]">
+                {user?.name || user?.email || 'Admin'}
               </span>
             </div>
           </div>
         </header>
 
         {/* Dynamic Page Content */}
-        <main className="p-4 sm:p-6 lg:p-8 flex-1 max-w-7xl w-full mx-auto space-y-6 sm:space-y-8">
+        <main className="p-3 sm:p-6 lg:p-8 flex-1 max-w-7xl w-full mx-auto space-y-6 max-w-full overflow-x-hidden">
           {children}
         </main>
       </div>

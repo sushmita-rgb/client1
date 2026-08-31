@@ -13,24 +13,24 @@ export default function AdminOverviewPage() {
   const totalViews = products.reduce((acc, p) => acc + (p.views || 0), 0);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8 max-w-full overflow-x-hidden">
       
       {/* Header Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 sm:p-6 rounded-2xl border border-slate-200 shadow-sm">
         <div>
-          <h1 className="font-serif text-2xl text-slate-800 font-bold">
-            Store Overview
+          <h1 className="font-serif text-xl sm:text-2xl text-slate-800 font-bold">
+            Overview
           </h1>
-          <p className="text-xs text-slate-500">
-            Real-time performance metrics and catalog activity for AurelleCharmsss
+          <p className="text-xs text-slate-500 hidden sm:block">
+            Real-time performance metrics and catalog activity
           </p>
         </div>
 
         <Link
           to="/admin/products"
-          className="inline-flex items-center text-xs font-semibold uppercase tracking-wider bg-[#4A607A] hover:bg-[#2C3E50] text-white px-4 py-2.5 rounded-xl transition-colors shadow-sm self-start sm:self-auto"
+          className="inline-flex items-center text-xs font-semibold uppercase tracking-wider bg-[#4A607A] hover:bg-[#2C3E50] text-white px-3.5 py-2.5 rounded-xl transition-colors shadow-sm self-start sm:self-auto"
         >
-          <Plus className="w-4 h-4 mr-1.5" />
+          <Plus className="w-4 h-4 mr-1.5 shrink-0" />
           <span>Add New Product</span>
         </Link>
       </div>

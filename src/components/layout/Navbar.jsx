@@ -30,47 +30,47 @@ export default function Navbar() {
           ✨ FREE SHIPPING ON ORDERS OVER ₹999 &nbsp;|&nbsp; HANDCRAFTED WITH LOVE
         </div>
 
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-          {/* Header Bar: Flex on mobile, 3-col grid on desktop */}
-          <div className="flex items-center justify-between md:grid md:grid-cols-3 h-16 sm:h-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Header Bar: Flex Far Left (Brand) | Center (Nav) | Far Right (Actions) */}
+          <div className="flex items-center justify-between h-20 sm:h-24">
 
-            {/* LEFT — Brand Logo & Title */}
-            <Link to="/" className="flex items-center space-x-2.5 sm:space-x-3 group shrink min-w-0 pr-2">
-              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full overflow-hidden border border-[#D0E2F3] shadow-soft-sm shrink-0 bg-[#FFFDF9] p-0.5 group-hover:scale-105 transition-transform">
+            {/* LEFT — Brand Logo & Title (Aligned Far Left) */}
+            <Link to="/" className="flex items-center space-x-3 sm:space-x-4 group shrink-0 py-2">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full overflow-hidden border-2 border-[#D0E2F3] shadow-soft shrink-0 bg-[#FFFDF9] p-1 group-hover:scale-105 transition-transform duration-300">
                 <img src="/assets/logo.png" alt="AurelleCharmsss Logo" className="w-full h-full object-contain rounded-full" />
               </div>
-              <div className="flex flex-col truncate">
-                <span className="font-serif text-base sm:text-lg md:text-xl tracking-wider sm:tracking-widest text-[#2C3E50] font-semibold group-hover:text-[#4A607A] transition-colors truncate">
+              <div className="flex flex-col">
+                <span className="font-serif text-base sm:text-xl md:text-2xl tracking-wider sm:tracking-widest text-[#2C3E50] font-bold group-hover:text-[#4A607A] transition-colors">
                   AURELLECHARMSSS
                 </span>
-                <span className="text-[8px] sm:text-[9px] tracking-widest sm:tracking-super-wide text-[#5C728A] font-medium uppercase -mt-0.5 truncate">
+                <span className="text-[8px] sm:text-[10px] tracking-widest sm:tracking-super-wide text-[#5C728A] font-semibold uppercase -mt-0.5 sm:-mt-1">
                   HANDMADE WITH LOVE
                 </span>
               </div>
             </Link>
 
-            {/* CENTER — Desktop Nav Links (perfectly centred by grid) */}
-            <nav className="hidden md:flex items-center justify-center space-x-10">
+            {/* CENTER — Desktop Nav Links */}
+            <nav className="hidden md:flex items-center justify-center space-x-8 lg:space-x-12 mx-4">
               {navLinks.map((link) => (
                 <Link
                   key={link.name}
                   to={link.path}
-                  className={`text-sm tracking-widest uppercase font-medium transition-all duration-200 relative py-1 ${
+                  className={`text-xs sm:text-sm tracking-widest uppercase font-semibold transition-all duration-200 relative py-1 ${
                     isActive(link.path)
-                      ? 'text-[#2C3E50] font-semibold'
+                      ? 'text-[#2C3E50]'
                       : 'text-[#5C728A] hover:text-[#2C3E50]'
                   }`}
                 >
                   {link.name}
                   {isActive(link.path) && (
-                    <span className="absolute bottom-0 left-0 w-full h-[1.5px] bg-[#D4AF37] rounded-full" />
+                    <span className="absolute bottom-0 left-0 w-full h-[2px] bg-[#D4AF37] rounded-full" />
                   )}
                 </Link>
               ))}
             </nav>
 
-            {/* RIGHT — Search + Auth */}
-            <div className="flex items-center justify-end space-x-3 sm:space-x-4">
+            {/* RIGHT — Search + Auth (Aligned Far Right) */}
+            <div className="flex items-center justify-end space-x-3 sm:space-x-4 shrink-0">
 
               {/* Search */}
               <button
@@ -87,7 +87,7 @@ export default function Navbar() {
                   {isAdmin && (
                     <Link
                       to="/admin"
-                      className="hidden sm:block text-xs font-semibold tracking-wider text-[#4A607A] bg-[#EBF3FA] hover:bg-[#D4E4F7] px-3 py-1.5 rounded-full transition-colors border border-[#B8D4F0]"
+                      className="hidden sm:block text-xs font-semibold tracking-wider text-[#4A607A] bg-[#EBF3FA] hover:bg-[#D4E4F7] px-3.5 py-1.5 rounded-full transition-colors border border-[#B8D4F0]"
                     >
                       DASHBOARD
                     </Link>
@@ -120,14 +120,14 @@ export default function Navbar() {
                 <div className="hidden sm:flex items-center space-x-3">
                   <Link
                     to="/login"
-                    className="text-xs tracking-widest font-medium text-[#5C728A] hover:text-[#2C3E50] transition-colors uppercase"
+                    className="text-xs tracking-widest font-semibold text-[#5C728A] hover:text-[#2C3E50] transition-colors uppercase px-2 py-1"
                   >
                     Login
                   </Link>
                   <span className="text-[#EBE3D5]">|</span>
                   <Link
                     to="/signup"
-                    className="text-xs tracking-widest font-medium text-[#2C3E50] bg-[#FAF7F2] hover:bg-[#EBF3FA] border border-[#D4E4F7] px-3.5 py-1.5 rounded-full transition-colors shadow-soft-sm uppercase"
+                    className="text-xs tracking-widest font-semibold text-[#2C3E50] bg-[#FAF7F2] hover:bg-[#EBF3FA] border border-[#D4E4F7] px-4 py-2 rounded-full transition-colors shadow-soft-sm uppercase"
                   >
                     Sign Up
                   </Link>

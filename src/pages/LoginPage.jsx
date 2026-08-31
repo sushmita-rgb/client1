@@ -32,8 +32,6 @@ export default function LoginPage() {
 
   const handleQuickAdminLogin = async () => {
     try {
-      setEmail('aurellecharmsss.gmail.com');
-      setPassword('aurellecharmsss4044');
       await login('aurellecharmsss.gmail.com', 'aurellecharmsss4044');
       navigate('/admin');
     } catch (e) {
@@ -70,7 +68,7 @@ export default function LoginPage() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-5" autoComplete="off">
           <div>
             <label className="block text-xs font-semibold tracking-wider text-[#4A607A] uppercase mb-2">
               Email Address
@@ -79,9 +77,11 @@ export default function LoginPage() {
               <Mail className="w-4 h-4 text-[#94A3B8] absolute left-3.5 top-3.5" />
               <input
                 type="email"
+                name="login_email_field"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="name@example.com"
+                autoComplete="off"
                 className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#FAF7F2] border border-[#EBE3D5] text-sm text-[#2C3E50] focus:outline-none focus:border-[#B8D4F0]"
                 required
               />
@@ -96,9 +96,11 @@ export default function LoginPage() {
               <Lock className="w-4 h-4 text-[#94A3B8] absolute left-3.5 top-3.5" />
               <input
                 type="password"
+                name="login_password_field"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
+                autoComplete="new-password"
                 className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#FAF7F2] border border-[#EBE3D5] text-sm text-[#2C3E50] focus:outline-none focus:border-[#B8D4F0]"
                 required
               />

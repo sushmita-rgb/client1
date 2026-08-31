@@ -28,11 +28,11 @@ export default function Footer() {
             </p>
             <div className="flex items-center space-x-4 pt-2">
               <a
-                href="https://instagram.com"
+                href="https://instagram.com/aurellecharmsss"
                 target="_blank"
                 rel="noreferrer"
                 className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-[#4A607A] hover:bg-[#D4E4F7] transition-colors border border-[#B8D4F0]"
-                title="Instagram"
+                title="Instagram (@aurellecharmsss)"
               >
                 <Instagram className="w-4 h-4" />
               </a>
@@ -95,18 +95,29 @@ export default function Footer() {
               Studio & Contact
             </h3>
             <ul className="space-y-2.5 text-sm text-[#5C728A]">
+              <li className="flex items-center">
+                <Instagram className="w-4 h-4 mr-2 text-[#4A607A] shrink-0" />
+                <a
+                  href="https://instagram.com/aurellecharmsss"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:text-[#2C3E50] underline font-semibold text-[#2C3E50]"
+                >
+                  @aurellecharmsss
+                </a>
+              </li>
               <li className="flex items-start">
                 <Mail className="w-4 h-4 mr-2 text-[#4A607A] mt-0.5 shrink-0" />
                 <span>hello@aurellecharmsss.com</span>
               </li>
               <li className="flex items-start">
                 <Phone className="w-4 h-4 mr-2 text-[#4A607A] mt-0.5 shrink-0" />
-                <span>+91 98765 43210 (WhatsApp Inquiry)</span>
-              </li>
-              <li className="text-xs text-[#94A3B8] pt-2">
-                Mon - Sat: 10:00 AM - 7:00 PM IST
+                <span>+91 98765 43210</span>
               </li>
             </ul>
+            <div className="mt-4 p-3 rounded-xl bg-white border border-[#B8D4F0] text-xs text-[#4A607A]">
+              ✨ <strong>Visit our Instagram page</strong> <a href="https://instagram.com/aurellecharmsss" target="_blank" rel="noreferrer" className="underline font-bold text-[#2C3E50]">@aurellecharmsss</a> to see more handcrafted designs & DM us directly for any order inquiries!
+            </div>
           </div>
 
         </div>

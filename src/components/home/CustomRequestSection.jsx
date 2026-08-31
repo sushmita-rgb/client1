@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Send, CheckCircle2, Sparkles, AlertCircle } from 'lucide-react';
+import { Send, CheckCircle2, Sparkles, AlertCircle, Instagram } from 'lucide-react';
 import { useRequests } from '../../context/RequestContext';
 
 export default function CustomRequestSection() {
@@ -69,7 +69,7 @@ export default function CustomRequestSection() {
             MADE JUST FOR YOU
           </h2>
           <p className="text-base text-[#5C728A] font-light leading-relaxed">
-            Have something special in mind? Tell us what you'd like and we'll create it for you.
+            Have something special in mind? Tell us what you'd like and we'll create it for you, or DM us on Instagram <a href="https://instagram.com/aurellecharmsss" target="_blank" rel="noreferrer" className="underline font-semibold text-[#2C3E50]">@aurellecharmsss</a>.
           </p>
         </div>
 
@@ -79,7 +79,7 @@ export default function CustomRequestSection() {
             <CheckCircle2 className="w-16 h-16 text-[#6FA3EA] mx-auto" />
             <h3 className="font-serif text-3xl text-[#2C3E50]">Request Received!</h3>
             <p className="text-sm text-[#5C728A] leading-relaxed">
-              Thank you for sharing your design idea with AurelleCharmsss. Our team will review your customization request and reach out to you via WhatsApp or Email within 24 hours.
+              Thank you for sharing your design idea with AurelleCharmsss. Our team will review your customization request and reach out to you via Instagram DM or Email within 24 hours.
             </p>
             <button
               onClick={() => setIsSuccess(false)}

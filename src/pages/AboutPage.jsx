@@ -1,6 +1,6 @@
 import React from 'react';
 import BrandStory from '../components/home/BrandStory';
-import { Heart, Sparkles, Shield, Gift } from 'lucide-react';
+import { Heart, Sparkles, Shield, Gift, Instagram } from 'lucide-react';
 
 export default function AboutPage() {
   return (
@@ -58,6 +58,26 @@ export default function AboutPage() {
               </p>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Instagram Banner */}
+      <section className="py-16 bg-[#EBF3FA] border-t border-[#D0E2F3] text-center">
+        <div className="max-w-xl mx-auto px-4 space-y-4">
+          <Instagram className="w-10 h-10 text-[#4A607A] mx-auto" />
+          <h2 className="font-serif text-3xl text-[#2C3E50]">Follow Us On Instagram</h2>
+          <p className="text-sm text-[#5C728A] leading-relaxed">
+            Visit our Instagram page <strong className="text-[#2C3E50]">@aurellecharmsss</strong> to explore our latest handcrafted drops, behind-the-scenes creation videos, and DM us directly for custom orders!
+          </p>
+          <a
+            href="https://instagram.com/aurellecharmsss"
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center text-xs font-semibold tracking-widest uppercase bg-[#4A607A] hover:bg-[#2C3E50] text-white px-8 py-3.5 rounded-full shadow-soft transition-all duration-300 gap-2"
+          >
+            <Instagram className="w-4 h-4" />
+            <span>VISIT INSTAGRAM (@aurellecharmsss)</span>
+          </a>
         </div>
       </section>
 

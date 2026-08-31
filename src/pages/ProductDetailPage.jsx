@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useProducts } from '../context/ProductContext';
 import RelatedProducts from '../components/products/RelatedProducts';
-import { Check, ShieldCheck, Heart, Sparkles, Phone, ArrowLeft, Eye } from 'lucide-react';
+import { Check, ShieldCheck, Heart, Sparkles, Phone, ArrowLeft, Eye, Instagram } from 'lucide-react';
 
 const categoryBg = {
   'Bracelets':        'from-[#EBF3FA] via-[#F4EFE6] to-[#FAF7F2]',
@@ -172,23 +172,31 @@ export default function ProductDetailPage() {
               </ul>
             </div>
 
-            {/* Actions: Add to Cart / WhatsApp Inquiry */}
+            {/* Actions: Instagram Inquiry / Order */}
             <div className="border-t border-[#FAF7F2] pt-6 space-y-3">
               {inquirySent ? (
-                <div className="p-4 rounded-xl bg-[#EBF3FA] border border-[#B8D4F0] text-[#4A607A] text-xs font-semibold text-center">
-                  ✨ Item added to your order inquiry! Our studio will connect with you via WhatsApp.
+                <div className="p-4 rounded-xl bg-[#EBF3FA] border border-[#B8D4F0] text-[#4A607A] text-xs font-semibold text-center space-y-2">
+                  <p>✨ Inquiry started! Connect with us directly on Instagram @aurellecharmsss.</p>
+                  <a
+                    href="https://instagram.com/aurellecharmsss"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-block text-[11px] font-bold text-[#2C3E50] underline uppercase"
+                  >
+                    Open Instagram (@aurellecharmsss)
+                  </a>
                 </div>
               ) : (
                 <div className="flex flex-col sm:flex-row gap-3">
                   <a
-                    href={`https://wa.me/919876543210?text=Hi%20AurelleCharmsss!%20I%20would%20like%20to%20order%20the%20${encodeURIComponent(product.name)}%20(Price:%20₹${product.price})`}
+                    href="https://instagram.com/aurellecharmsss"
                     target="_blank"
                     rel="noreferrer"
                     onClick={() => setInquirySent(true)}
-                    className="flex-1 inline-flex items-center justify-center text-[11px] sm:text-xs tracking-wider sm:tracking-widest uppercase font-semibold text-white bg-[#4A607A] hover:bg-[#2C3E50] py-3.5 px-4 sm:px-6 rounded-full shadow-soft hover:shadow-soft-lg transition-all duration-300 text-center"
+                    className="flex-1 inline-flex items-center justify-center text-[11px] sm:text-xs tracking-wider sm:tracking-widest uppercase font-semibold text-white bg-[#4A607A] hover:bg-[#2C3E50] py-3.5 px-4 sm:px-6 rounded-full shadow-soft hover:shadow-soft-lg transition-all duration-300 text-center gap-2"
                   >
-                    <Phone className="w-4 h-4 mr-2 shrink-0" />
-                    <span>INQUIRE / ORDER ON WHATSAPP</span>
+                    <Instagram className="w-4 h-4 shrink-0" />
+                    <span>INQUIRE / ORDER ON INSTAGRAM (@aurellecharmsss)</span>
                   </a>
                 </div>
               )}

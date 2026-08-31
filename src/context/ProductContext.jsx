@@ -86,9 +86,10 @@ export const ProductProvider = ({ children }) => {
     // Category filter
     if (selectedCategory && selectedCategory !== 'All') {
       if (selectedCategory === 'Best Collection') {
-        list = list.filter((p) => p.bestCollection || p.category === 'Best Collection');
+        list = list.filter((p) => p.bestCollection || (p.category && p.category.trim().toLowerCase() === 'best collection'));
       } else {
-        list = list.filter((p) => p.category === selectedCategory);
+        const targetCategory = selectedCategory.trim().toLowerCase();
+        list = list.filter((p) => p.category && p.category.trim().toLowerCase() === targetCategory);
       }
     }
 

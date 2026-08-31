@@ -133,11 +133,21 @@ export const appwriteService = {
           imageId = uploadedFile.$id;
           imageUrl = storage.getFilePreview(APPWRITE_CONFIG.bucketId, imageId).href;
         } catch (err) {
-          console.warn('Appwrite Storage upload failed, creating object URL:', err.message);
-          imageUrl = URL.createObjectURL(imageFile);
+          console.warn('Appwrite Storage upload failed, converting to Base64:', err.message);
+          imageUrl = await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result);
+            reader.readAsDataURL(imageFile);
+          });
         }
-      } else {
-        imageUrl = URL.createObjectURL(imageFile);
+      } else if (typeof imageFile === 'string') {
+        imageUrl = imageFile;
+      } else if (imageFile instanceof File) {
+        imageUrl = await new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result);
+          reader.readAsDataURL(imageFile);
+        });
       }
     }
 
@@ -195,10 +205,22 @@ export const appwriteService = {
           imageUrl = storage.getFilePreview(APPWRITE_CONFIG.bucketId, imageId).href;
         } catch (err) {
           console.warn('Storage upload error:', err.message);
-          imageUrl = URL.createObjectURL(newImageFile);
+          if (newImageFile instanceof File) {
+            imageUrl = await new Promise((resolve) => {
+              const reader = new FileReader();
+              reader.onloadend = () => resolve(reader.result);
+              reader.readAsDataURL(newImageFile);
+            });
+          }
         }
-      } else {
-        imageUrl = URL.createObjectURL(newImageFile);
+      } else if (typeof newImageFile === 'string') {
+        imageUrl = newImageFile;
+      } else if (newImageFile instanceof File) {
+        imageUrl = await new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result);
+          reader.readAsDataURL(newImageFile);
+        });
       }
     }
 

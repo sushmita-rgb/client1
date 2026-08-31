@@ -53,8 +53,12 @@ export default function ProductModal({ isOpen, onClose, editProductData = null }
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setImageFile(file);
-      setImagePreview(URL.createObjectURL(file));
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+        setImageFile(file); // raw file for Appwrite storage if available
+      };
+      reader.readAsDataURL(file);
     }
   };
 

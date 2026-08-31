@@ -53,7 +53,7 @@ export default function HeroSlider() {
   const handleNext = () => setCurrentSlide((prev) => (prev + 1) % slides.length);
 
   return (
-    <section className="relative w-full h-[82vh] min-h-[580px] max-h-[850px] overflow-hidden">
+    <section className="relative w-full h-[75vh] sm:h-[82vh] min-h-[480px] sm:min-h-[580px] max-h-[850px] overflow-hidden">
       <AnimatePresence mode="wait">
         <motion.div
           key={currentSlide}
@@ -75,22 +75,22 @@ export default function HeroSlider() {
           />
 
           {/* Left-side soft blue/cream overlay — matches the reference watercolor wash */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#D6E8F5]/92 via-[#EBF3FA]/60 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#D6E8F5]/92 via-[#EBF3FA]/75 sm:via-[#EBF3FA]/60 to-transparent" />
           {/* Very subtle top/bottom vignette */}
           <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-transparent to-white/20 pointer-events-none" />
 
           {/* Decorative star sparkle elements like the reference */}
-          <div className="absolute top-16 left-[38%] text-[#B8D4F0] text-2xl opacity-60 pointer-events-none select-none">✦</div>
-          <div className="absolute top-28 left-[42%] text-[#B8D4F0] text-sm opacity-40 pointer-events-none select-none">✦</div>
-          <div className="absolute bottom-24 left-[36%] text-[#B8D4F0] text-lg opacity-40 pointer-events-none select-none">✦</div>
+          <div className="absolute top-16 left-[38%] text-[#B8D4F0] text-2xl opacity-60 pointer-events-none select-none hidden sm:block">✦</div>
+          <div className="absolute top-28 left-[42%] text-[#B8D4F0] text-sm opacity-40 pointer-events-none select-none hidden sm:block">✦</div>
+          <div className="absolute bottom-24 left-[36%] text-[#B8D4F0] text-lg opacity-40 pointer-events-none select-none hidden sm:block">✦</div>
 
           {/* Text content — left side overlaid on the gradient */}
-          <div className="relative z-10 h-full flex flex-col justify-center px-8 sm:px-14 lg:px-20 max-w-xl">
+          <div className="relative z-10 h-full flex flex-col justify-center px-6 sm:px-14 lg:px-20 max-w-xl">
             <motion.span
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.15, duration: 0.5 }}
-              className="text-xs font-semibold tracking-widest text-[#4A7FA5] uppercase mb-5"
+              className="text-[10px] sm:text-xs font-semibold tracking-widest text-[#4A7FA5] uppercase mb-3 sm:mb-5"
             >
               AURELLECHARMSSS HANDMADE COLLECTION
             </motion.span>
@@ -99,7 +99,7 @@ export default function HeroSlider() {
               initial={{ y: 25, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.22, duration: 0.55 }}
-              className="font-serif text-5xl sm:text-6xl lg:text-7xl text-[#2C4A6E] leading-[1.05] font-normal tracking-wide mb-2"
+              className="font-serif text-3xl sm:text-5xl lg:text-6xl text-[#2C4A6E] leading-[1.1] sm:leading-[1.05] font-normal tracking-wide mb-2"
             >
               {slides[currentSlide].headline}
             </motion.h1>

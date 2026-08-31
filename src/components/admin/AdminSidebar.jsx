@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
-export default function AdminSidebar() {
+export default function AdminSidebar({ onClose }) {
   const { logout } = useAuth();
   const navigate = useNavigate();
 
@@ -27,6 +27,7 @@ export default function AdminSidebar() {
   ];
 
   const handleLogout = async () => {
+    if (onClose) onClose();
     await logout();
     navigate('/login');
   };
@@ -70,6 +71,7 @@ export default function AdminSidebar() {
                 key={item.name}
                 to={item.path}
                 end={item.path === '/admin'}
+                onClick={() => { if (onClose) onClose(); }}
                 className={({ isActive }) =>
                   `flex items-center px-4 py-3 rounded-xl text-xs font-medium tracking-wider uppercase transition-all ${
                     isActive

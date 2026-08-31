@@ -42,12 +42,12 @@ function MainLayout() {
       <ProtectedRoute adminOnly={true}>
         <AdminLayout>
           <Routes>
-            <Route path="/" element={<AdminOverviewPage />} />
-            <Route path="/products" element={<AdminProductsPage />} />
-            <Route path="/categories" element={<AdminCategoriesPage />} />
-            <Route path="/requests" element={<AdminRequestsPage />} />
-            <Route path="/analytics" element={<AdminAnalyticsPage />} />
-            <Route path="/settings" element={<AdminSettingsPage />} />
+            <Route path="/admin" element={<AdminOverviewPage />} />
+            <Route path="/admin/products" element={<AdminProductsPage />} />
+            <Route path="/admin/categories" element={<AdminCategoriesPage />} />
+            <Route path="/admin/requests" element={<AdminRequestsPage />} />
+            <Route path="/admin/analytics" element={<AdminAnalyticsPage />} />
+            <Route path="/admin/settings" element={<AdminSettingsPage />} />
           </Routes>
         </AdminLayout>
       </ProtectedRoute>

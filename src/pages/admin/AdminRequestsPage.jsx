@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useRequests } from '../../context/RequestContext';
-import { MessageSquareHeart, Phone, Mail, Clock, CheckCircle } from 'lucide-react';
+import { MessageSquareHeart, Phone, Mail, Clock, CheckCircle, Instagram } from 'lucide-react';
 
 export default function AdminRequestsPage() {
   const { requests, updateRequestStatus } = useRequests();
@@ -74,9 +74,9 @@ export default function AdminRequestsPage() {
                     {/* Contact */}
                     <td className="py-4 px-4 space-y-1">
                       <div className="flex items-center text-slate-600">
-                        <Phone className="w-3.5 h-3.5 mr-1.5 text-slate-400 shrink-0" />
-                        <a href={`https://wa.me/${req.phone?.replace(/[^0-9]/g, '')}`} target="_blank" rel="noreferrer" className="hover:underline font-mono">
-                          {req.phone}
+                        <Instagram className="w-3.5 h-3.5 mr-1.5 text-slate-400 shrink-0" />
+                        <a href="https://instagram.com/aurellecharmsss" target="_blank" rel="noreferrer" className="hover:underline font-mono">
+                          {req.phone || '@aurellecharmsss'}
                         </a>
                       </div>
                       <div className="flex items-center text-slate-500 text-[11px]">

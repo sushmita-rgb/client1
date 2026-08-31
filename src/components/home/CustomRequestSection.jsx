@@ -117,17 +117,17 @@ export default function CustomRequestSection() {
                 />
               </div>
 
-              {/* Phone Number */}
+              {/* Instagram Handle / Phone */}
               <div>
                 <label className="block text-xs font-semibold tracking-wider text-[#4A607A] uppercase mb-2">
-                  Phone Number (WhatsApp) *
+                  Instagram Handle / Phone *
                 </label>
                 <input
-                  type="tel"
+                  type="text"
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  placeholder="e.g. +91 98765 43210"
+                  placeholder="e.g. @your_insta_handle"
                   className="w-full px-4 py-3 rounded-xl bg-[#FAF7F2] border border-[#EBE3D5] text-sm text-[#2C3E50] focus:outline-none focus:border-[#B8D4F0] transition-colors"
                   required
                 />

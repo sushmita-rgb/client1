@@ -37,15 +37,6 @@ export default function Footer() {
                 <Instagram className="w-4 h-4" />
               </a>
               <a
-                href="https://wa.me/919876543210"
-                target="_blank"
-                rel="noreferrer"
-                className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-[#4A607A] hover:bg-[#D4E4F7] transition-colors border border-[#B8D4F0]"
-                title="WhatsApp"
-              >
-                <Phone className="w-4 h-4" />
-              </a>
-              <a
                 href="mailto:hello@aurellecharmsss.com"
                 className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-[#4A607A] hover:bg-[#D4E4F7] transition-colors border border-[#B8D4F0]"
                 title="Email"

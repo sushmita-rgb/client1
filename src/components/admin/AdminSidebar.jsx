@@ -39,17 +39,24 @@ export default function AdminSidebar({ onClose }) {
         {/* Brand Header */}
         <div className="p-4 border-b border-slate-700/60">
           <Link to="/" className="block group">
-            <div className="flex items-center space-x-2">
-              <span className="font-serif text-xl tracking-widest text-white font-semibold group-hover:text-[#94BEFA] transition-colors">
-                AURELLECHARMSSS
-              </span>
-              <span className="text-[10px] bg-[#4A607A] text-white px-2 py-0.5 rounded-md uppercase font-semibold tracking-wider">
-                ADMIN
-              </span>
+            <div className="flex items-center space-x-3">
+              <div className="w-9 h-9 rounded-full overflow-hidden border border-slate-600 bg-white p-0.5 shrink-0 group-hover:scale-105 transition-transform">
+                <img src="/assets/logo.png" alt="AurelleCharmsss Logo" className="w-full h-full object-contain rounded-full" />
+              </div>
+              <div className="min-w-0">
+                <div className="flex items-center space-x-1.5">
+                  <span className="font-serif text-base tracking-wider text-white font-semibold group-hover:text-[#94BEFA] transition-colors truncate">
+                    AURELLECHARMSSS
+                  </span>
+                  <span className="text-[9px] bg-[#4A607A] text-white px-1.5 py-0.5 rounded uppercase font-semibold tracking-wider shrink-0">
+                    ADMIN
+                  </span>
+                </div>
+                <span className="text-[8px] tracking-widest text-slate-400 font-medium uppercase block mt-0.5 truncate">
+                  STORE OWNER DASHBOARD
+                </span>
+              </div>
             </div>
-            <span className="text-[9px] tracking-super-wide text-slate-400 font-medium uppercase block mt-1">
-              STORE OWNER DASHBOARD
-            </span>
           </Link>
         </div>
 

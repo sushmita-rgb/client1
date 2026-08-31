@@ -34,14 +34,19 @@ export default function Navbar() {
           {/* Header Bar: Flex on mobile, 3-col grid on desktop */}
           <div className="flex items-center justify-between md:grid md:grid-cols-3 h-16 sm:h-20">
 
-            {/* LEFT — Brand */}
-            <Link to="/" className="flex flex-col group shrink min-w-0 pr-2">
-              <span className="font-serif text-base sm:text-xl md:text-2xl tracking-wider sm:tracking-widest text-[#2C3E50] font-semibold group-hover:text-[#4A607A] transition-colors truncate">
-                AURELLECHARMSSS
-              </span>
-              <span className="text-[8px] sm:text-[10px] tracking-widest sm:tracking-super-wide text-[#5C728A] font-medium uppercase -mt-0.5 sm:-mt-1 truncate">
-                HANDMADE WITH LOVE
-              </span>
+            {/* LEFT — Brand Logo & Title */}
+            <Link to="/" className="flex items-center space-x-2.5 sm:space-x-3 group shrink min-w-0 pr-2">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full overflow-hidden border border-[#D0E2F3] shadow-soft-sm shrink-0 bg-[#FFFDF9] p-0.5 group-hover:scale-105 transition-transform">
+                <img src="/assets/logo.png" alt="AurelleCharmsss Logo" className="w-full h-full object-contain rounded-full" />
+              </div>
+              <div className="flex flex-col truncate">
+                <span className="font-serif text-base sm:text-lg md:text-xl tracking-wider sm:tracking-widest text-[#2C3E50] font-semibold group-hover:text-[#4A607A] transition-colors truncate">
+                  AURELLECHARMSSS
+                </span>
+                <span className="text-[8px] sm:text-[9px] tracking-widest sm:tracking-super-wide text-[#5C728A] font-medium uppercase -mt-0.5 truncate">
+                  HANDMADE WITH LOVE
+                </span>
+              </div>
             </Link>
 
             {/* CENTER — Desktop Nav Links (perfectly centred by grid) */}

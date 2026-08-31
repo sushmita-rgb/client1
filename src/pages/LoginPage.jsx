@@ -46,7 +46,10 @@ export default function LoginPage() {
         
         {/* Brand Header */}
         <div className="text-center space-y-2">
-          <Link to="/" className="inline-block">
+          <Link to="/" className="inline-flex flex-col items-center group">
+            <div className="w-16 h-16 rounded-full overflow-hidden border border-[#D0E2F3] shadow-soft-sm bg-white p-1 mb-2 group-hover:scale-105 transition-transform">
+              <img src="/assets/logo.png" alt="AurelleCharmsss Logo" className="w-full h-full object-contain rounded-full" />
+            </div>
             <h2 className="font-serif text-2xl sm:text-3xl tracking-widest text-[#2C3E50] font-semibold">
               AURELLECHARMSSS
             </h2>

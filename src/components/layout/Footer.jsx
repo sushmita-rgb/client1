@@ -10,13 +10,18 @@ export default function Footer() {
           
           {/* Column 1: Brand Info */}
           <div className="md:col-span-2 space-y-4">
-            <Link to="/" className="inline-block">
-              <h2 className="font-serif text-2xl sm:text-3xl tracking-widest text-[#2C3E50] font-semibold">
-                AURELLECHARMSSS
-              </h2>
-              <span className="text-[10px] tracking-super-wide text-[#5C728A] font-medium uppercase block -mt-1">
-                HANDMADE WITH LOVE
-              </span>
+            <Link to="/" className="inline-flex items-center space-x-3.5 group">
+              <div className="w-12 h-12 rounded-full overflow-hidden border border-[#D0E2F3] shadow-soft-sm shrink-0 bg-white p-0.5 group-hover:scale-105 transition-transform">
+                <img src="/assets/logo.png" alt="AurelleCharmsss Logo" className="w-full h-full object-contain rounded-full" />
+              </div>
+              <div>
+                <h2 className="font-serif text-2xl sm:text-3xl tracking-widest text-[#2C3E50] font-semibold">
+                  AURELLECHARMSSS
+                </h2>
+                <span className="text-[10px] tracking-super-wide text-[#5C728A] font-medium uppercase block -mt-0.5">
+                  HANDMADE WITH LOVE
+                </span>
+              </div>
             </Link>
             <p className="text-sm text-[#5C728A] leading-relaxed max-w-md">
               Crafting delicate, modern handmade ornaments, bracelets, keychains, and mobile charms designed to bring beauty and joy into your daily routine.

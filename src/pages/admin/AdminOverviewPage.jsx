@@ -22,7 +22,7 @@ export default function AdminOverviewPage() {
             Store Overview
           </h1>
           <p className="text-xs text-slate-500">
-            Real-time performance metrics and catalog activity for RIZA
+            Real-time performance metrics and catalog activity for AurelleCharmsss
           </p>
         </div>
 

@@ -15,9 +15,9 @@ const databases = new Databases(client);
 async function revertAndUploadOriginalOrder() {
     console.log('🧹 Clearing existing products from Appwrite...');
     try {
-        const existing = await databases.listDocuments('riza_db', 'products', [Query.limit(100)]);
+        const existing = await databases.listDocuments('aurellecharmsss_db', 'products', [Query.limit(100)]);
         for (const doc of existing.documents) {
-            await databases.deleteDocument('riza_db', 'products', doc.$id);
+            await databases.deleteDocument('aurellecharmsss_db', 'products', doc.$id);
         }
         console.log(`✅ Cleared ${existing.documents.length} existing products.`);
     } catch (e) {
@@ -29,7 +29,7 @@ async function revertAndUploadOriginalOrder() {
     for (const p of INITIAL_PRODUCTS) {
         try {
             await databases.createDocument(
-                'riza_db',
+                'aurellecharmsss_db',
                 'products',
                 ID.unique(),
                 {

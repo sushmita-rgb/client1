@@ -11,8 +11,8 @@ export default function Footer() {
           {/* Column 1: Brand Info */}
           <div className="md:col-span-2 space-y-4">
             <Link to="/" className="inline-block">
-              <h2 className="font-serif text-3xl tracking-widest text-[#2C3E50] font-semibold">
-                RIZA
+              <h2 className="font-serif text-2xl sm:text-3xl tracking-widest text-[#2C3E50] font-semibold">
+                AURELLECHARMSSS
               </h2>
               <span className="text-[10px] tracking-super-wide text-[#5C728A] font-medium uppercase block -mt-1">
                 HANDMADE WITH LOVE
@@ -41,7 +41,7 @@ export default function Footer() {
                 <Phone className="w-4 h-4" />
               </a>
               <a
-                href="mailto:hello@rizahandmade.com"
+                href="mailto:hello@aurellecharmsss.com"
                 className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-[#4A607A] hover:bg-[#D4E4F7] transition-colors border border-[#B8D4F0]"
                 title="Email"
               >
@@ -92,7 +92,7 @@ export default function Footer() {
             <ul className="space-y-2.5 text-sm text-[#5C728A]">
               <li className="flex items-start">
                 <Mail className="w-4 h-4 mr-2 text-[#4A607A] mt-0.5 shrink-0" />
-                <span>hello@rizahandmade.com</span>
+                <span>hello@aurellecharmsss.com</span>
               </li>
               <li className="flex items-start">
                 <Phone className="w-4 h-4 mr-2 text-[#4A607A] mt-0.5 shrink-0" />
@@ -108,7 +108,7 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-[#5C728A]">
-          <p>© 2026 RIZA. All rights reserved.</p>
+          <p>© 2026 AURELLECHARMSSS. All rights reserved.</p>
           <p className="flex items-center mt-2 sm:mt-0 text-[11px]">
             Handcrafted with <Heart className="w-3 h-3 mx-1 text-rose-400 fill-rose-400" /> for ornament lovers worldwide
           </p>

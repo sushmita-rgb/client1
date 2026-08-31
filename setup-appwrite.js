@@ -13,15 +13,15 @@ const client = new Client()
 const databases = new Databases(client);
 const storage = new Storage(client);
 
-const DB_ID = 'riza_db';
+const DB_ID = 'aurellecharmsss_db';
 
 async function setup() {
     console.log('🚀 Appwrite setup starting...');
 
     // 1. Create Database
     try {
-        await databases.create(DB_ID, 'Riza DB');
-        console.log('✅ Database "riza_db" created');
+        await databases.create(DB_ID, 'AurelleCharmsss DB');
+        console.log('✅ Database "aurellecharmsss_db" created');
     } catch (e) {
         console.log('ℹ️ Database already exists or error:', e.message);
     }

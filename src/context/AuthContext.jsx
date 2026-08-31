@@ -64,12 +64,12 @@ export const AuthProvider = ({ children }) => {
     } else {
       const adminUser = {
         $id: 'usr-admin-demo',
-        email: 'admin@riza.com',
-        name: 'RIZA Owner Admin',
+        email: 'admin@aurellecharmsss.com',
+        name: 'AurelleCharmsss Owner Admin',
         isAdmin: true,
       };
       setUser(adminUser);
-      localStorage.setItem('riza_local_user', JSON.stringify(adminUser));
+      localStorage.setItem('aurellecharmsss_local_user', JSON.stringify(adminUser));
     }
   };
 

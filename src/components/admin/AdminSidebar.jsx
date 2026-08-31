@@ -39,8 +39,8 @@ export default function AdminSidebar() {
         <div className="p-4 border-b border-slate-700/60">
           <Link to="/" className="block group">
             <div className="flex items-center space-x-2">
-              <span className="font-serif text-2xl tracking-widest text-white font-semibold group-hover:text-[#94BEFA] transition-colors">
-                RIZA
+              <span className="font-serif text-xl tracking-widest text-white font-semibold group-hover:text-[#94BEFA] transition-colors">
+                AURELLECHARMSSS
               </span>
               <span className="text-[10px] bg-[#4A607A] text-white px-2 py-0.5 rounded-md uppercase font-semibold tracking-wider">
                 ADMIN

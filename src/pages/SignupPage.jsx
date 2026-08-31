@@ -34,15 +34,15 @@ export default function SignupPage() {
         {/* Header */}
         <div className="text-center space-y-2">
           <Link to="/" className="inline-block">
-            <h2 className="font-serif text-3xl tracking-widest text-[#2C3E50] font-semibold">
-              RIZA
+            <h2 className="font-serif text-2xl sm:text-3xl tracking-widest text-[#2C3E50] font-semibold">
+              AURELLECHARMSSS
             </h2>
             <span className="text-[9px] tracking-super-wide text-[#5C728A] font-medium uppercase block -mt-1">
               HANDMADE WITH LOVE
             </span>
           </Link>
           <h3 className="font-serif text-xl text-[#2C3E50] pt-2">Create Account</h3>
-          <p className="text-xs text-[#5C728A]">Join the RIZA community for bespoke handmade jewelry</p>
+          <p className="text-xs text-[#5C728A]">Join the AurelleCharmsss community for bespoke handmade jewelry</p>
         </div>
 
         {error && (

@@ -123,7 +123,7 @@ export const INITIAL_PRODUCTS = [
     name: 'Initial Keychain with Charms',
     category: 'Keychains',
     price: 329,
-    description: 'A charm-filled initial keychain combining your chosen letter with beautiful handmade bead accents and a decorative charm drop. Elegant yet playful — a signature RIZA piece.',
+    description: 'A charm-filled initial keychain combining your chosen letter with beautiful handmade bead accents and a decorative charm drop. Elegant yet playful — a signature AurelleCharmsss piece.',
     imageId: 'keychain/Customised_initial_keychain_v2',
     imageUrl: '/assets/keychain/Customised_initial_keychain_-removebg-preview.png',
     featured: true,

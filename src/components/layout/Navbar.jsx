@@ -36,8 +36,8 @@ export default function Navbar() {
 
             {/* LEFT — Brand */}
             <Link to="/" className="flex flex-col group w-fit">
-              <span className="font-serif text-2xl sm:text-3xl tracking-widest text-[#2C3E50] font-semibold group-hover:text-[#4A607A] transition-colors">
-                RIZA
+              <span className="font-serif text-xl sm:text-2xl tracking-widest text-[#2C3E50] font-semibold group-hover:text-[#4A607A] transition-colors">
+                AURELLECHARMSSS
               </span>
               <span className="text-[9px] sm:text-[10px] tracking-super-wide text-[#5C728A] font-medium uppercase -mt-1">
                 HANDMADE WITH LOVE

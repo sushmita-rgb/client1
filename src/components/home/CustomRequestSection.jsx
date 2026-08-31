@@ -79,7 +79,7 @@ export default function CustomRequestSection() {
             <CheckCircle2 className="w-16 h-16 text-[#6FA3EA] mx-auto" />
             <h3 className="font-serif text-3xl text-[#2C3E50]">Request Received!</h3>
             <p className="text-sm text-[#5C728A] leading-relaxed">
-              Thank you for sharing your design idea with RIZA. Our team will review your customization request and reach out to you via WhatsApp or Email within 24 hours.
+              Thank you for sharing your design idea with AurelleCharmsss. Our team will review your customization request and reach out to you via WhatsApp or Email within 24 hours.
             </p>
             <button
               onClick={() => setIsSuccess(false)}

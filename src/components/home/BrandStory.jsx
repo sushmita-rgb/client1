@@ -12,7 +12,7 @@ export default function BrandStory() {
             <div className="relative z-10 rounded-2xl overflow-hidden shadow-soft-lg border border-[#EBE3D5] aspect-[4/3] bg-gradient-to-br from-[#EBF3FA] via-[#F4EFE6] to-[#FAF7F2] flex items-center justify-center">
               <img
                 src="/assets/bracelets/Bracelets_combo-removebg-preview.png"
-                alt="RIZA Artisanal Crafting"
+                alt="AurelleCharmsss Artisanal Crafting"
                 className="w-3/4 h-3/4 object-contain drop-shadow-2xl"
               />
             </div>
@@ -34,7 +34,7 @@ export default function BrandStory() {
           <div className="space-y-6">
             <div className="inline-flex items-center space-x-2 text-xs font-semibold tracking-widest text-[#4A607A] uppercase bg-[#EBF3FA] px-3.5 py-1 rounded-full border border-[#B8D4F0]">
               <Feather className="w-3.5 h-3.5" />
-              <span>THE RIZA PHILOSOPHY</span>
+              <span>THE AURELLECHARMSSS PHILOSOPHY</span>
             </div>
 
             <h2 className="font-serif text-3xl sm:text-5xl text-[#2C3E50] font-normal leading-tight">
@@ -43,7 +43,7 @@ export default function BrandStory() {
             </h2>
 
             <p className="text-base text-[#5C728A] font-light leading-relaxed">
-              At <strong className="font-medium text-[#2C3E50]">RIZA</strong>, every bracelet, keychain, and phone strap is handcrafted individually with careful attention to detail. We believe that small accessories carry big sentimental charm.
+              At <strong className="font-medium text-[#2C3E50]">AurelleCharmsss</strong>, every bracelet, keychain, and phone strap is handcrafted individually with careful attention to detail. We believe that small accessories carry big sentimental charm.
             </p>
 
             <p className="text-sm text-[#5C728A] font-light leading-relaxed">

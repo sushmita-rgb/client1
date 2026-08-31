@@ -7,7 +7,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        riza: {
+        aurellecharmsss: {
           pastel: {
             50: '#F5F9FC',
             100: '#EBF3FA',

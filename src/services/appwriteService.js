@@ -2,13 +2,13 @@ import { databases, storage, account, APPWRITE_CONFIG, isAppwriteConfigured } fr
 import { ID, Query } from 'appwrite';
 import { INITIAL_PRODUCTS } from '../data/initialProducts';
 
-const LOCAL_PRODUCTS_KEY = 'riza_local_products';
-const LOCAL_REQUESTS_KEY = 'riza_local_requests';
-const LOCAL_USER_KEY = 'riza_local_user';
+const LOCAL_PRODUCTS_KEY = 'aurellecharmsss_local_products';
+const LOCAL_REQUESTS_KEY = 'aurellecharmsss_local_requests';
+const LOCAL_USER_KEY = 'aurellecharmsss_local_user';
 // Bump this version string whenever INITIAL_PRODUCTS changes so localStorage
 // is automatically wiped and re-seeded with the latest products/images.
-const PRODUCTS_SEED_VERSION = 'v3-real-assets';
-const LOCAL_SEED_VERSION_KEY = 'riza_products_seed_version';
+const PRODUCTS_SEED_VERSION = 'v4-aurellecharmsss-brand';
+const LOCAL_SEED_VERSION_KEY = 'aurellecharmsss_products_seed_version';
 
 // Helper to get local products from localStorage or initialize
 const getLocalProducts = () => {

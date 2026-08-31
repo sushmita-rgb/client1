@@ -14,7 +14,7 @@ const apiKey = process.env.APPWRITE_API_KEY;
 
 if (!projectId || !apiKey) {
   console.log('Appwrite Setup Info: To automatically provision Appwrite collections via API, specify VITE_APPWRITE_PROJECT_ID and APPWRITE_API_KEY.');
-  console.log('Otherwise, you can manually create the database "riza_db", collections "products", "custom_requests", "analytics", and bucket "product-images" in the Appwrite Console.');
+  console.log('Otherwise, you can manually create the database "aurellecharmsss_db", collections "products", "custom_requests", "analytics", and bucket "product-images" in the Appwrite Console.');
   process.exit(0);
 }
 
@@ -26,16 +26,16 @@ const client = new Client()
 const databases = new Databases(client);
 const storage = new Storage(client);
 
-const DB_ID = 'riza_db';
+const DB_ID = 'aurellecharmsss_db';
 const BUCKET_ID = 'product-images';
 
 async function setup() {
   try {
-    console.log('Creating database "riza_db"...');
+    console.log('Creating database "aurellecharmsss_db"...');
     try {
-      await databases.create(DB_ID, 'RIZA Database');
+      await databases.create(DB_ID, 'AurelleCharmsss Database');
     } catch (e) {
-      console.log('Database riza_db already exists or error:', e.message);
+      console.log('Database aurellecharmsss_db already exists or error:', e.message);
     }
 
     // 1. Create Products collection

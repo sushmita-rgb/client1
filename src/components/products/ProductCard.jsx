@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Eye } from 'lucide-react';
 
-// Per-category themed background gradients matching the RIZA pastel palette
+// Per-category themed background gradients matching the AurelleCharmsss pastel palette
 const categoryBg = {
   'Bracelets':        'from-[#EBF3FA] via-[#F4EFE6] to-[#FAF7F2]',
   'Keychains':        'from-[#F4EFE6] via-[#FFFDF9] to-[#EBF3FA]',

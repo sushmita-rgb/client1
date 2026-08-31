@@ -73,7 +73,7 @@ export default function ProductDetailPage() {
     'Handmade individually with premium beads',
     'Lightweight & comfortable for daily wear',
     'Adjustable size / universal fitting',
-    'Carefully packaged in signature RIZA gift box',
+    'Carefully packaged in signature AurelleCharmsss gift box',
   ];
 
   return (
@@ -181,7 +181,7 @@ export default function ProductDetailPage() {
               ) : (
                 <div className="flex flex-col sm:flex-row gap-3">
                   <a
-                    href={`https://wa.me/919876543210?text=Hi%20RIZA!%20I%20would%20like%20to%20order%20the%20${encodeURIComponent(product.name)}%20(Price:%20₹${product.price})`}
+                    href={`https://wa.me/919876543210?text=Hi%20AurelleCharmsss!%20I%20would%20like%20to%20order%20the%20${encodeURIComponent(product.name)}%20(Price:%20₹${product.price})`}
                     target="_blank"
                     rel="noreferrer"
                     onClick={() => setInquirySent(true)}

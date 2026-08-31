@@ -92,7 +92,7 @@ export default function HeroSlider() {
               transition={{ delay: 0.15, duration: 0.5 }}
               className="text-xs font-semibold tracking-widest text-[#4A7FA5] uppercase mb-5"
             >
-              RIZA HANDMADE COLLECTION
+              AURELLECHARMSSS HANDMADE COLLECTION
             </motion.span>
 
             <motion.h1

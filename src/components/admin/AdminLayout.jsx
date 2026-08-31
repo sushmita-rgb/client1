@@ -17,7 +17,7 @@ export default function AdminLayout({ children }) {
         <header className="bg-white border-b border-slate-200 px-8 py-4 flex items-center justify-between sticky top-0 z-30 shadow-sm">
           <div>
             <h2 className="font-serif text-xl text-slate-800 font-semibold">
-              RIZA Control Panel
+              AurelleCharmsss Control Panel
             </h2>
             <p className="text-xs text-slate-500">
               Manage products, custom requests, analytics & store configuration

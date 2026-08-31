@@ -4,31 +4,31 @@
   --font-serif: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
   --font-sans: 'Outfit', 'Inter', sans-serif;
 
-  --color-riza-pastel-50: #F5F9FC;
-  --color-riza-pastel-100: #EBF3FA;
-  --color-riza-pastel-200: #D4E4F7;
-  --color-riza-pastel-300: #B8D4F0;
-  --color-riza-pastel-400: #94BEFA;
-  --color-riza-pastel-500: #6FA3EA;
+  --color-aurellecharmsss-pastel-50: #F5F9FC;
+  --color-aurellecharmsss-pastel-100: #EBF3FA;
+  --color-aurellecharmsss-pastel-200: #D4E4F7;
+  --color-aurellecharmsss-pastel-300: #B8D4F0;
+  --color-aurellecharmsss-pastel-400: #94BEFA;
+  --color-aurellecharmsss-pastel-500: #6FA3EA;
 
-  --color-riza-powder: #C5DDF5;
-  --color-riza-cream-50: #FFFDF9;
-  --color-riza-cream-100: #FAF7F2;
-  --color-riza-cream-200: #F4EFE6;
-  --color-riza-cream-300: #EBE3D5;
+  --color-aurellecharmsss-powder: #C5DDF5;
+  --color-aurellecharmsss-cream-50: #FFFDF9;
+  --color-aurellecharmsss-cream-100: #FAF7F2;
+  --color-aurellecharmsss-cream-200: #F4EFE6;
+  --color-aurellecharmsss-cream-300: #EBE3D5;
   
-  --color-riza-ivory: #FFFDF9;
-  --color-riza-beige: #F2ECE4;
+  --color-aurellecharmsss-ivory: #FFFDF9;
+  --color-aurellecharmsss-beige: #F2ECE4;
 
-  --color-riza-slate-100: #E2E8F0;
-  --color-riza-slate-500: #64748B;
-  --color-riza-slate-600: #5C728A;
-  --color-riza-slate-700: #4A607A;
-  --color-riza-slate-800: #2C3E50;
-  --color-riza-slate-900: #1E293B;
+  --color-aurellecharmsss-slate-100: #E2E8F0;
+  --color-aurellecharmsss-slate-500: #64748B;
+  --color-aurellecharmsss-slate-600: #5C728A;
+  --color-aurellecharmsss-slate-700: #4A607A;
+  --color-aurellecharmsss-slate-800: #2C3E50;
+  --color-aurellecharmsss-slate-900: #1E293B;
 
-  --color-riza-gold-500: #E5C158;
-  --color-riza-gold-600: #D4AF37;
+  --color-aurellecharmsss-gold-500: #E5C158;
+  --color-aurellecharmsss-gold-600: #D4AF37;
 }
 
 @layer base {

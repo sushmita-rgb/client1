@@ -13,7 +13,7 @@ export default function AboutPage() {
             OUR STORY & CRAFT
           </span>
           <h1 className="font-serif text-4xl sm:text-5xl text-[#2C3E50] font-normal">
-            ABOUT RIZA
+            ABOUT AURELLECHARMSSS
           </h1>
           <p className="text-base text-[#5C728A] font-light max-w-xl mx-auto leading-relaxed">
             Handcrafted ornaments designed with delicate beads, pastel colors, and sentimental charms.
@@ -54,7 +54,7 @@ export default function AboutPage() {
               </div>
               <h3 className="font-serif text-2xl text-[#2C3E50]">Signature Gifting</h3>
               <p className="text-sm text-[#5C728A] font-light leading-relaxed">
-                All products arrive packaged in our signature RIZA aesthetic boxes ready for gifting to yourself or loved ones.
+                All products arrive packaged in our signature AurelleCharmsss aesthetic boxes ready for gifting to yourself or loved ones.
               </p>
             </div>
           </div>

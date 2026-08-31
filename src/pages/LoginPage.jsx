@@ -32,7 +32,7 @@ export default function LoginPage() {
 
   const handleQuickAdminLogin = async () => {
     try {
-      await login('admin@riza.com', 'admin123');
+      await login('admin@aurellecharmsss.com', 'admin123');
       navigate('/admin');
     } catch (e) {
       toggleDemoAdmin();
@@ -47,8 +47,8 @@ export default function LoginPage() {
         {/* Brand Header */}
         <div className="text-center space-y-2">
           <Link to="/" className="inline-block">
-            <h2 className="font-serif text-3xl tracking-widest text-[#2C3E50] font-semibold">
-              RIZA
+            <h2 className="font-serif text-2xl sm:text-3xl tracking-widest text-[#2C3E50] font-semibold">
+              AURELLECHARMSSS
             </h2>
             <span className="text-[9px] tracking-super-wide text-[#5C728A] font-medium uppercase block -mt-1">
               HANDMADE WITH LOVE

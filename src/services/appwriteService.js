@@ -4,6 +4,7 @@ import { INITIAL_PRODUCTS } from '../data/initialProducts';
 
 const LOCAL_PRODUCTS_KEY = 'aurellecharmsss_local_products';
 const LOCAL_REQUESTS_KEY = 'aurellecharmsss_local_requests';
+const LOCAL_INQUIRIES_KEY = 'aurellecharmsss_local_inquiries';
 const LOCAL_USER_KEY = 'aurellecharmsss_local_user';
 // Bump this version string whenever INITIAL_PRODUCTS changes so localStorage
 // is automatically wiped and re-seeded with the latest products/images.
@@ -48,6 +49,20 @@ const getLocalRequests = () => {
 
 const saveLocalRequests = (requests) => {
   localStorage.setItem(LOCAL_REQUESTS_KEY, JSON.stringify(requests));
+};
+
+const getLocalInquiries = () => {
+  const stored = localStorage.getItem(LOCAL_INQUIRIES_KEY);
+  if (!stored) return [];
+  try {
+    return JSON.parse(stored);
+  } catch (e) {
+    return [];
+  }
+};
+
+const saveLocalInquiries = (inquiries) => {
+  localStorage.setItem(LOCAL_INQUIRIES_KEY, JSON.stringify(inquiries));
 };
 
 export const appwriteService = {
@@ -364,6 +379,101 @@ export const appwriteService = {
       return requests[index];
     }
     return null;
+  },
+
+  // PRODUCT INQUIRIES
+  async getProductInquiries() {
+    if (isAppwriteConfigured()) {
+      try {
+        const response = await databases.listDocuments(
+          APPWRITE_CONFIG.databaseId,
+          'product_inquiries',
+          [Query.orderDesc('$createdAt'), Query.limit(100)]
+        );
+        if (response.documents.length > 0) return response.documents;
+      } catch (e) {
+        console.warn('Appwrite list product inquiries failed, using local fallback:', e.message);
+      }
+    }
+    return getLocalInquiries();
+  },
+
+  async createProductInquiry(inquiryData) {
+    const payload = {
+      productId: inquiryData.productId || '',
+      productName: inquiryData.productName || 'Unknown Product',
+      productImage: inquiryData.productImage || '',
+      productPrice: inquiryData.productPrice || 0,
+      userName: inquiryData.userName || 'Guest Visitor',
+      userEmail: inquiryData.userEmail || '',
+      status: 'New Inquiry',
+      createdAt: new Date().toISOString(),
+    };
+
+    if (isAppwriteConfigured()) {
+      try {
+        return await databases.createDocument(
+          APPWRITE_CONFIG.databaseId,
+          'product_inquiries',
+          ID.unique(),
+          payload
+        );
+      } catch (e) {
+        console.warn('Appwrite inquiry document creation failed, using local fallback:', e.message);
+      }
+    }
+
+    const inquiries = getLocalInquiries();
+    const newDoc = {
+      $id: 'inq-local-' + Date.now(),
+      ...payload,
+    };
+    inquiries.unshift(newDoc);
+    saveLocalInquiries(inquiries);
+    return newDoc;
+  },
+
+  async updateInquiryStatus(id, status) {
+    if (isAppwriteConfigured()) {
+      try {
+        return await databases.updateDocument(
+          APPWRITE_CONFIG.databaseId,
+          'product_inquiries',
+          id,
+          { status }
+        );
+      } catch (e) {
+        console.warn('Appwrite inquiry status update failed:', e.message);
+      }
+    }
+
+    const inquiries = getLocalInquiries();
+    const index = inquiries.findIndex((i) => i.$id === id || i.id === id);
+    if (index !== -1) {
+      inquiries[index].status = status;
+      saveLocalInquiries(inquiries);
+      return inquiries[index];
+    }
+    return null;
+  },
+
+  async deleteInquiry(id) {
+    if (isAppwriteConfigured()) {
+      try {
+        await databases.deleteDocument(
+          APPWRITE_CONFIG.databaseId,
+          'product_inquiries',
+          id
+        );
+      } catch (e) {
+        console.warn('Appwrite inquiry delete failed:', e.message);
+      }
+    }
+
+    const inquiries = getLocalInquiries();
+    const updated = inquiries.filter((i) => i.$id !== id && i.id !== id);
+    saveLocalInquiries(updated);
+    return true;
   },
 
   // AUTHENTICATION

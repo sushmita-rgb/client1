@@ -22,6 +22,7 @@ import AdminOverviewPage from './pages/admin/AdminOverviewPage';
 import AdminProductsPage from './pages/admin/AdminProductsPage';
 import AdminCategoriesPage from './pages/admin/AdminCategoriesPage';
 import AdminRequestsPage from './pages/admin/AdminRequestsPage';
+import AdminInquiriesPage from './pages/admin/AdminInquiriesPage';
 import AdminAnalyticsPage from './pages/admin/AdminAnalyticsPage';
 import AdminSettingsPage from './pages/admin/AdminSettingsPage';
 
@@ -46,6 +47,7 @@ function MainLayout() {
             <Route path="/admin/products" element={<AdminProductsPage />} />
             <Route path="/admin/categories" element={<AdminCategoriesPage />} />
             <Route path="/admin/requests" element={<AdminRequestsPage />} />
+            <Route path="/admin/inquiries" element={<AdminInquiriesPage />} />
             <Route path="/admin/analytics" element={<AdminAnalyticsPage />} />
             <Route path="/admin/settings" element={<AdminSettingsPage />} />
           </Routes>

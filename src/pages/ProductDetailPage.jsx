@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useProducts } from '../context/ProductContext';
+import { useRequests } from '../context/RequestContext';
+import { useAuth } from '../context/AuthContext';
 import RelatedProducts from '../components/products/RelatedProducts';
 import { Check, ShieldCheck, Heart, Sparkles, Phone, ArrowLeft, Eye, Instagram } from 'lucide-react';
 
@@ -14,10 +16,26 @@ const categoryBg = {
 export default function ProductDetailPage() {
   const { id } = useParams();
   const { getProduct, incrementViews } = useProducts();
+  const { submitProductInquiry } = useRequests();
+  const { user } = useAuth();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState('');
   const [inquirySent, setInquirySent] = useState(false);
+
+  const handleInquiryClick = () => {
+    setInquirySent(true);
+    if (product) {
+      submitProductInquiry({
+        productId: product.$id || product.id,
+        productName: product.name,
+        productImage: product.imageUrl,
+        productPrice: product.price,
+        userName: user ? (user.name || user.email) : 'Guest Visitor',
+        userEmail: user ? user.email : 'Not Logged In',
+      });
+    }
+  };
 
   useEffect(() => {
     loadProduct();
@@ -192,7 +210,7 @@ export default function ProductDetailPage() {
                     href="https://instagram.com/aurellecharmsss"
                     target="_blank"
                     rel="noreferrer"
-                    onClick={() => setInquirySent(true)}
+                    onClick={handleInquiryClick}
                     className="flex-1 inline-flex items-center justify-center text-[11px] sm:text-xs tracking-wider sm:tracking-widest uppercase font-semibold text-white bg-[#4A607A] hover:bg-[#2C3E50] py-3.5 px-4 sm:px-6 rounded-full shadow-soft hover:shadow-soft-lg transition-all duration-300 text-center gap-2"
                   >
                     <Instagram className="w-4 h-4 shrink-0" />

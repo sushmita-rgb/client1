@@ -5,26 +5,31 @@ const RequestContext = createContext();
 
 export const RequestProvider = ({ children }) => {
   const [requests, setRequests] = useState([]);
+  const [inquiries, setInquiries] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    loadRequests();
+    loadAllData();
   }, []);
 
-  const loadRequests = async () => {
+  const loadAllData = async () => {
     setLoading(true);
     try {
-      const data = await appwriteService.getCustomRequests();
-      setRequests(data);
+      const [reqData, inqData] = await Promise.all([
+        appwriteService.getCustomRequests(),
+        appwriteService.getProductInquiries(),
+      ]);
+      setRequests(reqData || []);
+      setInquiries(inqData || []);
     } catch (e) {
-      console.error('Error loading custom requests:', e);
+      console.error('Error loading requests & inquiries:', e);
     } finally {
       setLoading(false);
     }
   };
 
-  const submitCustomRequest = async (requestData) => {
-    const newDoc = await appwriteService.createCustomRequest(requestData);
+  const submitCustomRequest = async (requestData, file) => {
+    const newDoc = await appwriteService.createCustomRequest(requestData, file);
     if (newDoc) {
       setRequests((prev) => [newDoc, ...prev]);
     }
@@ -41,14 +46,44 @@ export const RequestProvider = ({ children }) => {
     return updated;
   };
 
+  const submitProductInquiry = async (inquiryData) => {
+    const newDoc = await appwriteService.createProductInquiry(inquiryData);
+    if (newDoc) {
+      setInquiries((prev) => [newDoc, ...prev]);
+    }
+    return newDoc;
+  };
+
+  const updateInquiryStatus = async (id, status) => {
+    const updated = await appwriteService.updateInquiryStatus(id, status);
+    if (updated) {
+      setInquiries((prev) =>
+        prev.map((i) => ((i.$id === id || i.id === id) ? { ...i, status } : i))
+      );
+    }
+    return updated;
+  };
+
+  const deleteInquiry = async (id) => {
+    const ok = await appwriteService.deleteInquiry(id);
+    if (ok) {
+      setInquiries((prev) => prev.filter((i) => i.$id !== id && i.id !== id));
+    }
+    return ok;
+  };
+
   return (
     <RequestContext.Provider
       value={{
         requests,
+        inquiries,
         loading,
         submitCustomRequest,
         updateRequestStatus,
-        loadRequests,
+        submitProductInquiry,
+        updateInquiryStatus,
+        deleteInquiry,
+        loadAllData,
       }}
     >
       {children}

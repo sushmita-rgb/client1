@@ -5,6 +5,7 @@ import {
   Package,
   FolderTree,
   MessageSquareHeart,
+  ShoppingBag,
   BarChart3,
   Settings,
   LogOut,
@@ -22,6 +23,7 @@ export default function AdminSidebar({ onClose }) {
     { name: 'Products', path: '/admin/products', icon: Package },
     { name: 'Categories', path: '/admin/categories', icon: FolderTree },
     { name: 'Custom Requests', path: '/admin/requests', icon: MessageSquareHeart },
+    { name: 'Product Enquiries', path: '/admin/inquiries', icon: ShoppingBag },
     { name: 'Analytics', path: '/admin/analytics', icon: BarChart3 },
     { name: 'Settings', path: '/admin/settings', icon: Settings },
   ];

@@ -52,13 +52,13 @@ export default function ProductGrid() {
 
       {/* Grid Content */}
       {loading ? (
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 animate-pulse">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 animate-pulse">
           {[1, 2, 3, 4, 5, 6].map((i) => (
             <div key={i} className="bg-[#F4EFE6] aspect-square rounded-xl" />
           ))}
         </div>
       ) : paginatedProducts.length > 0 ? (
-        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {paginatedProducts.map((product) => (
             <ProductCard key={product.$id || product.id} product={product} />
           ))}

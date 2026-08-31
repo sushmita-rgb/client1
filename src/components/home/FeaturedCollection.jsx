@@ -26,13 +26,13 @@ export default function FeaturedCollection() {
 
         {/* Dynamic Product Grid */}
         {loading ? (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 animate-pulse">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 animate-pulse">
             {[1, 2, 3, 4].map((i) => (
               <div key={i} className="bg-[#F4EFE6] aspect-square rounded-xl" />
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
             {featuredProducts.map((product) => (
               <ProductCard key={product.$id || product.id} product={product} />
             ))}

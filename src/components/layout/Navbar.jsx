@@ -87,28 +87,34 @@ export default function Navbar() {
                   {isAdmin && (
                     <Link
                       to="/admin"
-                      className="hidden sm:block text-xs font-semibold tracking-wider text-[#4A607A] bg-[#EBF3FA] hover:bg-[#D4E4F7] px-3.5 py-1.5 rounded-full transition-colors border border-[#B8D4F0]"
+                      className="hidden md:block text-[11px] font-semibold tracking-wider text-[#4A607A] bg-[#EBF3FA] hover:bg-[#D4E4F7] px-3 py-1.5 rounded-full transition-colors border border-[#B8D4F0]"
                     >
                       DASHBOARD
                     </Link>
                   )}
                   <div className="relative group">
-                    <button className="flex items-center p-1.5 rounded-full hover:bg-[#F4EFE6] transition-colors">
-                      <User className="w-5 h-5 text-[#5C728A]" />
+                    <button className="flex items-center space-x-2 py-1.5 px-3 rounded-full bg-[#FAF7F2] hover:bg-[#EBF3FA] border border-[#D4E4F7] transition-all duration-200 shadow-soft-sm">
+                      <div className="w-6 h-6 rounded-full bg-[#4A607A] text-white flex items-center justify-center text-[11px] font-bold uppercase shrink-0">
+                        {(user.name || user.email || 'U').charAt(0)}
+                      </div>
+                      <span className="text-xs font-bold tracking-wider text-[#2C3E50] max-w-[110px] sm:max-w-[140px] truncate uppercase">
+                        Hi, {user.name || user.email?.split('@')[0] || 'User'}
+                      </span>
                     </button>
-                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-soft border border-[#EBE3D5] py-2 hidden group-hover:block z-50">
+
+                    <div className="absolute right-0 mt-2 w-52 bg-white rounded-xl shadow-soft-lg border border-[#EBE3D5] py-2 hidden group-hover:block z-50 animate-fade-in">
                       <div className="px-4 py-2 border-b border-[#FAF7F2]">
-                        <p className="text-xs text-[#94A3B8]">Signed in as</p>
-                        <p className="text-sm font-medium text-[#2C3E50] truncate">{user.name || user.email}</p>
+                        <p className="text-[10px] text-[#94A3B8] uppercase font-semibold tracking-wider">Signed in as</p>
+                        <p className="text-xs font-bold text-[#2C3E50] truncate mt-0.5">{user.name || user.email}</p>
                       </div>
                       {isAdmin && (
-                        <Link to="/admin" className="block px-4 py-2 text-xs text-[#4A607A] font-medium hover:bg-[#FAF7F2]">
-                          Admin Dashboard
+                        <Link to="/admin" className="block px-4 py-2 text-xs text-[#4A607A] font-semibold hover:bg-[#FAF7F2]">
+                          ⚡ Admin Dashboard
                         </Link>
                       )}
                       <button
                         onClick={logout}
-                        className="w-full text-left px-4 py-2 text-xs text-red-500 hover:bg-red-50 flex items-center"
+                        className="w-full text-left px-4 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 flex items-center transition-colors"
                       >
                         <LogOut className="w-3.5 h-3.5 mr-2" />
                         Logout
@@ -163,7 +169,37 @@ export default function Navbar() {
               ))}
             </nav>
 
-            {!user && (
+            {user ? (
+              <div className="pt-3 border-t border-[#EBE3D5] space-y-3">
+                <div className="flex items-center space-x-3 p-3 bg-[#FAF7F2] rounded-xl border border-[#EBE3D5]">
+                  <div className="w-9 h-9 rounded-full bg-[#4A607A] text-white flex items-center justify-center font-bold text-xs uppercase shrink-0">
+                    {(user.name || user.email || 'U').charAt(0)}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs font-bold text-[#2C3E50] truncate">Hi, {user.name || user.email?.split('@')[0]}</p>
+                    <p className="text-[10px] text-[#5C728A] truncate">{user.email}</p>
+                  </div>
+                </div>
+                {isAdmin && (
+                  <Link
+                    to="/admin"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="block text-center text-xs font-semibold py-2.5 rounded-full bg-[#EBF3FA] text-[#4A607A] border border-[#B8D4F0] uppercase tracking-wider"
+                  >
+                    ⚡ Admin Dashboard
+                  </Link>
+                )}
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    logout();
+                  }}
+                  className="w-full text-center text-xs font-semibold py-2.5 rounded-full bg-rose-50 text-rose-600 border border-rose-200 uppercase tracking-wider"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
               <div className="pt-2 flex gap-3">
                 <Link
                   to="/login"

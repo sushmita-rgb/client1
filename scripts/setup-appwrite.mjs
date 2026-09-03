@@ -26,7 +26,7 @@ const client = new Client()
 const databases = new Databases(client);
 const storage = new Storage(client);
 
-const DB_ID = 'aurellecharmsss_db';
+const DB_ID = process.env.VITE_APPWRITE_DATABASE_ID || '6a993364000e5125dbd2';
 const BUCKET_ID = 'product-images';
 
 async function setup() {

@@ -1,7 +1,7 @@
 import { Client, Account, Databases, Storage } from 'appwrite';
 
 const endpoint = import.meta.env.VITE_APPWRITE_ENDPOINT || 'https://cloud.appwrite.io/v1';
-const projectId = import.meta.env.VITE_APPWRITE_PROJECT_ID || 'aurellecharmsss_project';
+const projectId = import.meta.env.VITE_APPWRITE_PROJECT_ID || '6a9932fb003d3766f26b';
 
 export const client = new Client();
 
@@ -16,7 +16,7 @@ export const databases = new Databases(client);
 export const storage = new Storage(client);
 
 export const APPWRITE_CONFIG = {
-  databaseId: import.meta.env.VITE_APPWRITE_DATABASE_ID || 'aurellecharmsss_db',
+  databaseId: import.meta.env.VITE_APPWRITE_DATABASE_ID || '6a993364000e5125dbd2',
   productsCollectionId: import.meta.env.VITE_APPWRITE_COLLECTION_PRODUCTS || 'products',
   requestsCollectionId: import.meta.env.VITE_APPWRITE_COLLECTION_REQUESTS || 'custom_requests',
   analyticsCollectionId: import.meta.env.VITE_APPWRITE_COLLECTION_ANALYTICS || 'analytics',

@@ -44,7 +44,7 @@ export default function AdminSettingsPage() {
               <input
                 type="text"
                 readOnly
-                value={import.meta.env.VITE_APPWRITE_DATABASE_ID || 'aurellecharmsss_db'}
+                value={import.meta.env.VITE_APPWRITE_DATABASE_ID || '6a993364000e5125dbd2'}
                 className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-mono text-xs text-slate-700"
               />
             </div>

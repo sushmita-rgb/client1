@@ -1,8 +1,8 @@
 import { Client, Databases, Storage, Permission, Role } from 'node-appwrite';
 
 // 1. Read details from environment variables or defaults
-const PROJECT_ID = process.env.VITE_APPWRITE_PROJECT_ID || '6a93ca8b0039f02143d4';
-const API_KEY = process.env.APPWRITE_API_KEY;
+const PROJECT_ID = process.env.VITE_APPWRITE_PROJECT_ID || '6a9932fb003d3766f26b';
+const API_KEY = process.env.NEW_APPWRITE_API_KEY || process.env.APPWRITE_API_KEY;
 const ENDPOINT = process.env.VITE_APPWRITE_ENDPOINT || 'https://cloud.appwrite.io/v1';
 
 const client = new Client()
@@ -13,7 +13,7 @@ const client = new Client()
 const databases = new Databases(client);
 const storage = new Storage(client);
 
-const DB_ID = 'aurellecharmsss_db';
+const DB_ID = process.env.VITE_APPWRITE_DATABASE_ID || '6a993364000e5125dbd2';
 
 async function setup() {
     console.log('🚀 Appwrite setup starting...');

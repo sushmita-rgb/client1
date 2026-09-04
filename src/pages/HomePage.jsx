@@ -2,6 +2,7 @@ import React from 'react';
 import HeroSlider from '../components/home/HeroSlider';
 import FeaturedCollection from '../components/home/FeaturedCollection';
 import CategoryGrid from '../components/home/CategoryGrid';
+import Testimonials from '../components/home/Testimonials';
 import CustomRequestSection from '../components/home/CustomRequestSection';
 import BrandStory from '../components/home/BrandStory';
 
@@ -17,10 +18,13 @@ export default function HomePage() {
       {/* SECTION 3 — COLLECTION CATEGORIES */}
       <CategoryGrid />
 
-      {/* SECTION 4 — CUSTOMIZED ORDERS */}
+      {/* SECTION 4 — CUSTOMER TESTIMONIALS */}
+      <Testimonials />
+
+      {/* SECTION 5 — CUSTOMIZED ORDERS */}
       <CustomRequestSection />
 
-      {/* SECTION 5 — BRAND / ABOUT */}
+      {/* SECTION 6 — BRAND / ABOUT */}
       <BrandStory />
     </div>
   );

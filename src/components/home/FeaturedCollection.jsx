@@ -8,7 +8,7 @@ export default function FeaturedCollection() {
   const { featuredProducts, loading } = useProducts();
 
   return (
-    <section className="py-20 bg-[#FAF7F2]">
+    <section id="featured" className="py-20 bg-[#FAF7F2] scroll-mt-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}

@@ -72,11 +72,6 @@ export default function Footer() {
                   Custom Orders
                 </a>
               </li>
-              <li>
-                <Link to="/login" className="hover:text-[#2C3E50] transition-colors">
-                  Customer Login
-                </Link>
-              </li>
             </ul>
           </div>
 

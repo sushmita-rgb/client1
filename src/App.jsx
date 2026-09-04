@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { ProductProvider } from './context/ProductContext';
 import { RequestProvider } from './context/RequestContext';
@@ -13,7 +13,6 @@ import CollectionsPage from './pages/CollectionsPage';
 import ProductDetailPage from './pages/ProductDetailPage';
 import AboutPage from './pages/AboutPage';
 import LoginPage from './pages/LoginPage';
-import SignupPage from './pages/SignupPage';
 
 // Admin Components & Pages
 import ProtectedRoute from './components/common/ProtectedRoute';
@@ -23,7 +22,6 @@ import AdminProductsPage from './pages/admin/AdminProductsPage';
 import AdminCategoriesPage from './pages/admin/AdminCategoriesPage';
 import AdminRequestsPage from './pages/admin/AdminRequestsPage';
 import AdminInquiriesPage from './pages/admin/AdminInquiriesPage';
-import AdminAnalyticsPage from './pages/admin/AdminAnalyticsPage';
 import AdminSettingsPage from './pages/admin/AdminSettingsPage';
 
 function ScrollToTop() {
@@ -48,7 +46,6 @@ function MainLayout() {
             <Route path="/admin/categories" element={<AdminCategoriesPage />} />
             <Route path="/admin/requests" element={<AdminRequestsPage />} />
             <Route path="/admin/inquiries" element={<AdminInquiriesPage />} />
-            <Route path="/admin/analytics" element={<AdminAnalyticsPage />} />
             <Route path="/admin/settings" element={<AdminSettingsPage />} />
           </Routes>
         </AdminLayout>
@@ -66,7 +63,8 @@ function MainLayout() {
           <Route path="/product/:id" element={<ProductDetailPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
+          {/* /signup is gone; catch stale links instead of rendering an empty page */}
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
       <Footer />

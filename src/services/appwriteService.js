@@ -1,310 +1,83 @@
-import { databases, storage, account, APPWRITE_CONFIG, isAppwriteConfigured } from '../lib/appwrite';
+import { databases, storage, account, APPWRITE_CONFIG } from '../lib/appwrite';
 import { ID, Query } from 'appwrite';
-import { INITIAL_PRODUCTS } from '../data/initialProducts';
 
-const LOCAL_PRODUCTS_KEY = 'aurellecharmsss_local_products';
-const LOCAL_REQUESTS_KEY = 'aurellecharmsss_local_requests';
-const LOCAL_INQUIRIES_KEY = 'aurellecharmsss_local_inquiries';
-const LOCAL_USER_KEY = 'aurellecharmsss_local_user';
-// Bump this version string whenever INITIAL_PRODUCTS changes so localStorage
-// is automatically wiped and re-seeded with the latest products/images.
-const PRODUCTS_SEED_VERSION = 'v4-aurellecharmsss-brand';
-const LOCAL_SEED_VERSION_KEY = 'aurellecharmsss_products_seed_version';
+const { databaseId, productsCollectionId, requestsCollectionId, inquiriesCollectionId, bucketId } =
+  APPWRITE_CONFIG;
 
-// Helper to get local products from localStorage or initialize
-const getLocalProducts = () => {
-  // If the seed version changed, clear old cache so new images load immediately
-  const storedVersion = localStorage.getItem(LOCAL_SEED_VERSION_KEY);
-  if (storedVersion !== PRODUCTS_SEED_VERSION) {
-    localStorage.removeItem(LOCAL_PRODUCTS_KEY);
-    localStorage.setItem(LOCAL_SEED_VERSION_KEY, PRODUCTS_SEED_VERSION);
-  }
+// Appwrite is the only source of truth. There is no localStorage mirror: a silent
+// fallback is how an empty/misconfigured database looked like a working site.
+// Reads return what the server returns (including []); writes throw so the caller
+// can show the real failure.
 
-  const stored = localStorage.getItem(LOCAL_PRODUCTS_KEY);
-  if (!stored) {
-    localStorage.setItem(LOCAL_PRODUCTS_KEY, JSON.stringify(INITIAL_PRODUCTS));
-    return INITIAL_PRODUCTS;
-  }
-  try {
-    return JSON.parse(stored);
-  } catch (e) {
-    return INITIAL_PRODUCTS;
-  }
+// /preview (Appwrite's image transforms) is paid-plan only and 403s here, so the
+// file is uploaded and served as-is via /view. Compress before uploading.
+const uploadImage = async (file) => {
+  const uploaded = await storage.createFile(bucketId, ID.unique(), file);
+  return { imageId: uploaded.$id, imageUrl: storage.getFileView(bucketId, uploaded.$id) };
 };
 
-const saveLocalProducts = (products) => {
-  localStorage.setItem(LOCAL_PRODUCTS_KEY, JSON.stringify(products));
-};
-
-
-const getLocalRequests = () => {
-  const stored = localStorage.getItem(LOCAL_REQUESTS_KEY);
-  if (!stored) return [];
-  try {
-    return JSON.parse(stored);
-  } catch (e) {
-    return [];
-  }
-};
-
-const saveLocalRequests = (requests) => {
-  localStorage.setItem(LOCAL_REQUESTS_KEY, JSON.stringify(requests));
-};
-
-const getLocalInquiries = () => {
-  const stored = localStorage.getItem(LOCAL_INQUIRIES_KEY);
-  if (!stored) return [];
-  try {
-    return JSON.parse(stored);
-  } catch (e) {
-    return [];
-  }
-};
-
-const saveLocalInquiries = (inquiries) => {
-  localStorage.setItem(LOCAL_INQUIRIES_KEY, JSON.stringify(inquiries));
-};
+const productPayload = (d, imageId, imageUrl) => ({
+  name: d.name,
+  category: d.category,
+  price: parseFloat(d.price) || 0,
+  description: d.description || '',
+  imageId: imageId || '',
+  imageUrl: imageUrl || '',
+  featured: Boolean(d.featured),
+  bestCollection: Boolean(d.bestCollection),
+  available: d.available !== undefined ? Boolean(d.available) : true,
+});
 
 export const appwriteService = {
-  // PRODUCTS
+  // ---------- PRODUCTS (public read, admin write) ----------
   async getProducts() {
-    if (isAppwriteConfigured()) {
-      try {
-        const response = await databases.listDocuments(
-          APPWRITE_CONFIG.databaseId,
-          APPWRITE_CONFIG.productsCollectionId,
-          [Query.orderDesc('createdAt'), Query.limit(100)]
-        );
-        if (response.documents.length > 0) {
-          return response.documents;
-        }
-      } catch (err) {
-        console.warn('Appwrite listDocuments failed, using local storage fallback:', err.message);
-      }
-    }
-    return getLocalProducts();
+    const res = await databases.listDocuments(databaseId, productsCollectionId, [
+      Query.orderDesc('createdAt'),
+      Query.limit(100),
+    ]);
+    return res.documents;
   },
 
   async getProductById(id) {
-    if (isAppwriteConfigured()) {
-      try {
-        return await databases.getDocument(
-          APPWRITE_CONFIG.databaseId,
-          APPWRITE_CONFIG.productsCollectionId,
-          id
-        );
-      } catch (err) {
-        console.warn('Appwrite getDocument failed, checking local:', err.message);
-      }
-    }
-    const localProds = getLocalProducts();
-    return localProds.find((p) => p.$id === id || p.id === id) || null;
-  },
-
-  async incrementProductViews(id) {
-    if (isAppwriteConfigured()) {
-      try {
-        const currentDoc = await databases.getDocument(
-          APPWRITE_CONFIG.databaseId,
-          APPWRITE_CONFIG.productsCollectionId,
-          id
-        );
-        const newViews = (currentDoc.views || 0) + 1;
-        return await databases.updateDocument(
-          APPWRITE_CONFIG.databaseId,
-          APPWRITE_CONFIG.productsCollectionId,
-          id,
-          { views: newViews }
-        );
-      } catch (err) {
-        console.warn('Appwrite view count update failed:', err.message);
-      }
-    }
-    
-    // Fallback local update
-    const prods = getLocalProducts();
-    const index = prods.findIndex((p) => p.$id === id || p.id === id);
-    if (index !== -1) {
-      prods[index].views = (prods[index].views || 0) + 1;
-      saveLocalProducts(prods);
-      return prods[index];
-    }
-    return null;
+    return databases.getDocument(databaseId, productsCollectionId, id);
   },
 
   async createProduct(productData, imageFile) {
-    let imageUrl = productData.imageUrl || '/assets/bracelets/Customised_Bracelets_-removebg-preview.png';
-    let imageId = productData.imageId || '';
+    let { imageId, imageUrl } = productData;
+    if (imageFile instanceof File) ({ imageId, imageUrl } = await uploadImage(imageFile));
+    else if (typeof imageFile === 'string' && imageFile) imageUrl = imageFile;
 
-    // If image file is uploaded and Appwrite is configured
-    if (imageFile) {
-      if (isAppwriteConfigured()) {
-        try {
-          const uploadedFile = await storage.createFile(
-            APPWRITE_CONFIG.bucketId,
-            ID.unique(),
-            imageFile
-          );
-          imageId = uploadedFile.$id;
-          imageUrl = storage.getFilePreview(APPWRITE_CONFIG.bucketId, imageId).href;
-        } catch (err) {
-          console.warn('Appwrite Storage upload failed, converting to Base64:', err.message);
-          imageUrl = await new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onloadend = () => resolve(reader.result);
-            reader.readAsDataURL(imageFile);
-          });
-        }
-      } else if (typeof imageFile === 'string') {
-        imageUrl = imageFile;
-      } else if (imageFile instanceof File) {
-        imageUrl = await new Promise((resolve) => {
-          const reader = new FileReader();
-          reader.onloadend = () => resolve(reader.result);
-          reader.readAsDataURL(imageFile);
-        });
-      }
-    }
-
-    const payload = {
-      name: productData.name,
-      category: productData.category,
-      price: parseFloat(productData.price),
-      description: productData.description,
-      imageId,
-      imageUrl,
-      featured: Boolean(productData.featured),
-      bestCollection: Boolean(productData.bestCollection),
-      available: productData.available !== undefined ? Boolean(productData.available) : true,
-      views: 0,
+    return databases.createDocument(databaseId, productsCollectionId, ID.unique(), {
+      ...productPayload(productData, imageId, imageUrl),
       createdAt: new Date().toISOString(),
-    };
-
-    if (isAppwriteConfigured()) {
-      try {
-        return await databases.createDocument(
-          APPWRITE_CONFIG.databaseId,
-          APPWRITE_CONFIG.productsCollectionId,
-          ID.unique(),
-          payload
-        );
-      } catch (err) {
-        console.warn('Appwrite document creation failed, storing locally:', err.message);
-      }
-    }
-
-    // Local fallback creation
-    const prods = getLocalProducts();
-    const newDoc = {
-      $id: 'prod-local-' + Date.now(),
-      ...payload,
-    };
-    prods.unshift(newDoc);
-    saveLocalProducts(prods);
-    return newDoc;
+    });
   },
 
   async updateProduct(id, productData, newImageFile) {
-    let imageUrl = productData.imageUrl;
-    let imageId = productData.imageId;
+    let { imageId, imageUrl } = productData;
+    if (newImageFile instanceof File) ({ imageId, imageUrl } = await uploadImage(newImageFile));
+    else if (typeof newImageFile === 'string' && newImageFile) imageUrl = newImageFile;
 
-    if (newImageFile) {
-      if (isAppwriteConfigured()) {
-        try {
-          const uploadedFile = await storage.createFile(
-            APPWRITE_CONFIG.bucketId,
-            ID.unique(),
-            newImageFile
-          );
-          imageId = uploadedFile.$id;
-          imageUrl = storage.getFilePreview(APPWRITE_CONFIG.bucketId, imageId).href;
-        } catch (err) {
-          console.warn('Storage upload error:', err.message);
-          if (newImageFile instanceof File) {
-            imageUrl = await new Promise((resolve) => {
-              const reader = new FileReader();
-              reader.onloadend = () => resolve(reader.result);
-              reader.readAsDataURL(newImageFile);
-            });
-          }
-        }
-      } else if (typeof newImageFile === 'string') {
-        imageUrl = newImageFile;
-      } else if (newImageFile instanceof File) {
-        imageUrl = await new Promise((resolve) => {
-          const reader = new FileReader();
-          reader.onloadend = () => resolve(reader.result);
-          reader.readAsDataURL(newImageFile);
-        });
-      }
-    }
-
-    const payload = {
-      name: productData.name,
-      category: productData.category,
-      price: parseFloat(productData.price),
-      description: productData.description,
-      imageId,
-      imageUrl,
-      featured: Boolean(productData.featured),
-      bestCollection: Boolean(productData.bestCollection),
-      available: Boolean(productData.available),
-    };
-
-    if (isAppwriteConfigured()) {
-      try {
-        return await databases.updateDocument(
-          APPWRITE_CONFIG.databaseId,
-          APPWRITE_CONFIG.productsCollectionId,
-          id,
-          payload
-        );
-      } catch (err) {
-        console.warn('Appwrite update failed:', err.message);
-      }
-    }
-
-    // Local update
-    const prods = getLocalProducts();
-    const index = prods.findIndex((p) => p.$id === id || p.id === id);
-    if (index !== -1) {
-      prods[index] = { ...prods[index], ...payload };
-      saveLocalProducts(prods);
-      return prods[index];
-    }
-    return null;
+    return databases.updateDocument(
+      databaseId,
+      productsCollectionId,
+      id,
+      productPayload(productData, imageId, imageUrl)
+    );
   },
 
   async deleteProduct(id, imageId) {
-    if (isAppwriteConfigured()) {
-      try {
-        await databases.deleteDocument(
-          APPWRITE_CONFIG.databaseId,
-          APPWRITE_CONFIG.productsCollectionId,
-          id
-        );
-        if (imageId) {
-          try {
-            await storage.deleteFile(APPWRITE_CONFIG.bucketId, imageId);
-          } catch (e) {
-            // file delete optional ignore
-          }
-        }
-      } catch (err) {
-        console.warn('Appwrite document delete failed:', err.message);
-      }
+    await databases.deleteDocument(databaseId, productsCollectionId, id);
+    if (imageId) {
+      // The document is already gone; a stale file must not fail the delete.
+      await storage.deleteFile(bucketId, imageId).catch(() => {});
     }
-
-    // Local fallback delete
-    const prods = getLocalProducts();
-    const filtered = prods.filter((p) => p.$id !== id && p.id !== id);
-    saveLocalProducts(filtered);
     return true;
   },
 
-  // CUSTOM REQUESTS
+  // ---------- CUSTOM REQUESTS (anyone may create, admin reads) ----------
   async createCustomRequest(requestData) {
-    const payload = {
+    return databases.createDocument(databaseId, requestsCollectionId, ID.unique(), {
       name: requestData.name,
       phone: requestData.phone,
       email: requestData.email,
@@ -313,93 +86,32 @@ export const appwriteService = {
       message: requestData.message || '',
       status: 'New',
       createdAt: new Date().toISOString(),
-    };
-
-    if (isAppwriteConfigured()) {
-      try {
-        return await databases.createDocument(
-          APPWRITE_CONFIG.databaseId,
-          APPWRITE_CONFIG.requestsCollectionId,
-          ID.unique(),
-          payload
-        );
-      } catch (err) {
-        console.warn('Appwrite custom request create failed:', err.message);
-      }
-    }
-
-    // Local fallback
-    const requests = getLocalRequests();
-    const newDoc = {
-      $id: 'req-' + Date.now(),
-      ...payload,
-    };
-    requests.unshift(newDoc);
-    saveLocalRequests(requests);
-    return newDoc;
+    });
   },
 
   async getCustomRequests() {
-    if (isAppwriteConfigured()) {
-      try {
-        const response = await databases.listDocuments(
-          APPWRITE_CONFIG.databaseId,
-          APPWRITE_CONFIG.requestsCollectionId,
-          [Query.orderDesc('createdAt')]
-        );
-        if (response.documents.length > 0) {
-          return response.documents;
-        }
-      } catch (err) {
-        console.warn('Appwrite list custom requests failed:', err.message);
-      }
-    }
-    return getLocalRequests();
+    const res = await databases.listDocuments(databaseId, requestsCollectionId, [
+      Query.orderDesc('createdAt'),
+      Query.limit(100),
+    ]);
+    return res.documents;
   },
 
-  async updateRequestStatus(id, newStatus) {
-    if (isAppwriteConfigured()) {
-      try {
-        return await databases.updateDocument(
-          APPWRITE_CONFIG.databaseId,
-          APPWRITE_CONFIG.requestsCollectionId,
-          id,
-          { status: newStatus }
-        );
-      } catch (err) {
-        console.warn('Appwrite request status update failed:', err.message);
-      }
-    }
-
-    const requests = getLocalRequests();
-    const index = requests.findIndex((r) => r.$id === id || r.id === id);
-    if (index !== -1) {
-      requests[index].status = newStatus;
-      saveLocalRequests(requests);
-      return requests[index];
-    }
-    return null;
+  async updateRequestStatus(id, status) {
+    return databases.updateDocument(databaseId, requestsCollectionId, id, { status });
   },
 
-  // PRODUCT INQUIRIES
+  // ---------- PRODUCT INQUIRIES (anyone may create, admin reads) ----------
   async getProductInquiries() {
-    if (isAppwriteConfigured()) {
-      try {
-        const response = await databases.listDocuments(
-          APPWRITE_CONFIG.databaseId,
-          'product_inquiries',
-          [Query.orderDesc('$createdAt'), Query.limit(100)]
-        );
-        if (response.documents.length > 0) return response.documents;
-      } catch (e) {
-        console.warn('Appwrite list product inquiries failed, using local fallback:', e.message);
-      }
-    }
-    return getLocalInquiries();
+    const res = await databases.listDocuments(databaseId, inquiriesCollectionId, [
+      Query.orderDesc('createdAt'),
+      Query.limit(100),
+    ]);
+    return res.documents;
   },
 
   async createProductInquiry(inquiryData) {
-    const payload = {
+    return databases.createDocument(databaseId, inquiriesCollectionId, ID.unique(), {
       productId: inquiryData.productId || '',
       productName: inquiryData.productName || 'Unknown Product',
       productImage: inquiryData.productImage || '',
@@ -408,196 +120,41 @@ export const appwriteService = {
       userEmail: inquiryData.userEmail || '',
       status: 'New Inquiry',
       createdAt: new Date().toISOString(),
-    };
-
-    if (isAppwriteConfigured()) {
-      try {
-        return await databases.createDocument(
-          APPWRITE_CONFIG.databaseId,
-          'product_inquiries',
-          ID.unique(),
-          payload
-        );
-      } catch (e) {
-        console.warn('Appwrite inquiry document creation failed, using local fallback:', e.message);
-      }
-    }
-
-    const inquiries = getLocalInquiries();
-    const newDoc = {
-      $id: 'inq-local-' + Date.now(),
-      ...payload,
-    };
-    inquiries.unshift(newDoc);
-    saveLocalInquiries(inquiries);
-    return newDoc;
+    });
   },
 
   async updateInquiryStatus(id, status) {
-    if (isAppwriteConfigured()) {
-      try {
-        return await databases.updateDocument(
-          APPWRITE_CONFIG.databaseId,
-          'product_inquiries',
-          id,
-          { status }
-        );
-      } catch (e) {
-        console.warn('Appwrite inquiry status update failed:', e.message);
-      }
-    }
-
-    const inquiries = getLocalInquiries();
-    const index = inquiries.findIndex((i) => i.$id === id || i.id === id);
-    if (index !== -1) {
-      inquiries[index].status = status;
-      saveLocalInquiries(inquiries);
-      return inquiries[index];
-    }
-    return null;
+    return databases.updateDocument(databaseId, inquiriesCollectionId, id, { status });
   },
 
   async deleteInquiry(id) {
-    if (isAppwriteConfigured()) {
-      try {
-        await databases.deleteDocument(
-          APPWRITE_CONFIG.databaseId,
-          'product_inquiries',
-          id
-        );
-      } catch (e) {
-        console.warn('Appwrite inquiry delete failed:', e.message);
-      }
-    }
-
-    const inquiries = getLocalInquiries();
-    const updated = inquiries.filter((i) => i.$id !== id && i.id !== id);
-    saveLocalInquiries(updated);
+    await databases.deleteDocument(databaseId, inquiriesCollectionId, id);
     return true;
   },
 
-  // AUTHENTICATION
-  async signup(email, password, name) {
-    const cleanEmail = email ? email.toLowerCase().trim() : '';
-    const cleanPassword = password ? password.trim() : '';
-    const cleanName = name ? name.trim() : cleanEmail.split('@')[0];
-
-    if (!cleanEmail || !cleanPassword) {
-      throw new Error('Please enter both an email address and password.');
-    }
-
-    if (isAppwriteConfigured()) {
-      try {
-        await account.create(ID.unique(), cleanEmail, cleanPassword, cleanName);
-        return await account.createEmailPasswordSession(cleanEmail, cleanPassword);
-      } catch (err) {
-        console.warn('Appwrite Cloud signup failed or CORS blocked, using local fallback:', err.message);
-      }
-    }
-
-    const user = {
-      $id: 'usr-' + Date.now(),
-      email: cleanEmail,
-      name: cleanName,
-      isAdmin:
-        cleanEmail === 'aurellecharmsss.gmail.com' ||
-        cleanEmail === 'aurellecharmsss@gmail.com' ||
-        cleanEmail.includes('admin'),
-    };
-    localStorage.setItem(LOCAL_USER_KEY, JSON.stringify(user));
-    return user;
-  },
-
+  // ---------- AUTHENTICATION ----------
+  // One Appwrite auth user is the admin. Everyone else browses anonymously —
+  // there are no customer accounts. This flag only drives UI routing; the real
+  // gate is the collection permissions, which are scoped to the admin's user id.
   async login(email, password) {
-    const cleanEmail = email ? email.toLowerCase().trim() : '';
-    const cleanPassword = password ? password.trim() : '';
-
+    const cleanEmail = (email || '').toLowerCase().trim();
+    const cleanPassword = (password || '').trim();
     if (!cleanEmail || !cleanPassword) {
       throw new Error('Please enter both your email address and password to sign in.');
     }
-
-    const isAttemptingAdminEmail =
-      cleanEmail === 'aurellecharmsss.gmail.com' ||
-      cleanEmail === 'aurellecharmsss@gmail.com' ||
-      cleanEmail === 'admin@aurellecharmsss.com';
-
-    const isAdminCreds = isAttemptingAdminEmail && cleanPassword === 'aurellecharmsss4044';
-
-    if (isAttemptingAdminEmail && !isAdminCreds) {
-      throw new Error('Invalid email address or password.');
-    }
-
-    if (isAppwriteConfigured()) {
-      try {
-        return await account.createEmailPasswordSession(cleanEmail, cleanPassword);
-      } catch (err) {
-        console.warn('Appwrite Cloud login failed or CORS blocked, using local auth:', err.message);
-        if (isAttemptingAdminEmail && !isAdminCreds) {
-          throw new Error('Invalid email address or password.');
-        }
-      }
-    }
-
-    if (isAttemptingAdminEmail && !isAdminCreds) {
-      throw new Error('Invalid email address or password.');
-    }
-
-    const user = {
-      $id: isAdminCreds ? 'usr-admin-' + Date.now() : 'usr-' + Date.now(),
-      email: cleanEmail,
-      name: isAdminCreds ? 'AURELLECHARMSSS ADMIN' : (cleanEmail.split('@')[0] || 'User').toUpperCase(),
-      isAdmin: isAdminCreds,
-    };
-    localStorage.setItem(LOCAL_USER_KEY, JSON.stringify(user));
-    return user;
+    // A stale session blocks createEmailPasswordSession with a 401.
+    await account.deleteSession('current').catch(() => {});
+    await account.createEmailPasswordSession(cleanEmail, cleanPassword);
+    return this.getCurrentUser();
   },
 
   async getCurrentUser() {
-    if (isAppwriteConfigured()) {
-      try {
-        const acc = await account.get();
-        if (acc) {
-          return {
-            ...acc,
-            isAdmin:
-              acc.email === 'aurellecharmsss.gmail.com' ||
-              acc.email === 'aurellecharmsss@gmail.com' ||
-              acc.email === import.meta.env.VITE_ADMIN_EMAIL ||
-              acc.email?.includes('admin'),
-          };
-        }
-      } catch (err) {
-        // Fallback to local storage user session
-      }
-    }
-    const stored = localStorage.getItem(LOCAL_USER_KEY);
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored);
-        if (
-          parsed.email === 'aurellecharmsss.gmail.com' ||
-          parsed.email === 'aurellecharmsss@gmail.com' ||
-          parsed.email?.includes('admin')
-        ) {
-          parsed.isAdmin = true;
-        }
-        return parsed;
-      } catch (e) {
-        return null;
-      }
-    }
-    return null;
+    const acc = await account.get();
+    return { ...acc, isAdmin: acc.$id === APPWRITE_CONFIG.adminUserId };
   },
 
   async logout() {
-    if (isAppwriteConfigured()) {
-      try {
-        await account.deleteSession('current');
-      } catch (err) {
-        // ignore
-      }
-    }
-    localStorage.removeItem(LOCAL_USER_KEY);
+    await account.deleteSession('current').catch(() => {});
     return true;
   },
 };

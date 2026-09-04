@@ -8,7 +8,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login, toggleDemoAdmin } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -106,16 +106,6 @@ export default function LoginPage() {
             <ArrowRight className="w-4 h-4 ml-2" />
           </button>
         </form>
-
-        {/* Account Signup Link */}
-        <div className="pt-4 border-t border-[#FAF7F2] text-center">
-          <p className="text-xs text-[#5C728A]">
-            Don't have an account?{' '}
-            <Link to="/signup" className="font-semibold text-[#2C3E50] underline">
-              Sign Up
-            </Link>
-          </p>
-        </div>
 
       </div>
     </div>

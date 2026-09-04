@@ -2,90 +2,79 @@ import React, { useState } from 'react';
 import { Send, CheckCircle2, Sparkles, AlertCircle, Instagram } from 'lucide-react';
 import { useRequests } from '../../context/RequestContext';
 
+const INSTAGRAM_URL = 'https://instagram.com/aurellecharmsss';
+const EMPTY = { name: '', phone: '', email: '', category: 'Bracelets', request: '', message: '' };
+
+const FIELD =
+  'w-full px-4 py-3 rounded-xl bg-[#FAF7F2] border border-[#EBE3D5] text-sm text-[#2C3E50] ' +
+  'placeholder:text-[#7B8794] focus:outline-none focus:border-[#B8D4F0] transition-colors';
+const LABEL = 'block text-xs font-semibold tracking-wider text-[#4A607A] uppercase mb-2';
+
 export default function CustomRequestSection() {
   const { submitCustomRequest } = useRequests();
-  const [formData, setFormData] = useState({
-    name: '',
-    phone: '',
-    email: '',
-    category: 'Bracelets',
-    request: '',
-    message: '',
-  });
-
+  const [formData, setFormData] = useState(EMPTY);
   const [loading, setLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState('');
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     if (error) setError('');
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.name || !formData.phone || !formData.email || !formData.request) {
-      setError('Please fill in all required fields.');
-      return;
-    }
-
     setLoading(true);
     setError('');
-
     try {
       await submitCustomRequest(formData);
+      setFormData(EMPTY);
       setIsSuccess(true);
-      setFormData({
-        name: '',
-        phone: '',
-        email: '',
-        category: 'Bracelets',
-        request: '',
-        message: '',
-      });
     } catch (err) {
-      setError('Failed to send custom request. Please try again.');
+      // The write goes straight to Appwrite; show what it actually said.
+      setError(err?.message || 'Failed to send your request. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <section id="custom-orders" className="py-24 bg-[#EBF3FA] relative overflow-hidden">
-      {/* Soft background decor */}
+    <section id="custom-orders" className="py-24 bg-[#EBF3FA] relative overflow-hidden scroll-mt-24">
       <div className="absolute -top-24 -right-24 w-96 h-96 bg-[#D0E2F3]/40 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-white/60 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
-        {/* Header */}
-        <div className="text-center max-w-2xl mx-auto mb-14 space-y-3">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="text-center max-w-2xl mx-auto mb-12 space-y-3">
           <div className="inline-flex items-center space-x-2 text-xs font-semibold tracking-widest text-[#4A607A] uppercase bg-white/70 px-4 py-1.5 rounded-full border border-[#B8D4F0]">
             <Sparkles className="w-3.5 h-3.5 text-[#D4AF37]" />
             <span>BESPOKE CREATIONS</span>
           </div>
-          <h2 className="font-serif text-3xl sm:text-5xl text-[#2C3E50] font-normal">
+          <h2 className="font-serif text-3xl sm:text-5xl text-[#2C3E50] font-normal text-balance">
             MADE JUST FOR YOU
           </h2>
-          <p className="text-base text-[#5C728A] font-light leading-relaxed">
-            Have something special in mind? Tell us what you'd like and we'll create it for you, or DM us on Instagram <a href="https://instagram.com/aurellecharmsss" target="_blank" rel="noreferrer" className="underline font-semibold text-[#2C3E50]">@aurellecharmsss</a>.
+          <p className="text-base text-[#4A607A] font-light leading-relaxed text-pretty">
+            Tell us what you have in mind and we&apos;ll come back with a mock-up, a price and a
+            timeline &mdash; or just DM us on Instagram{' '}
+            <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer" className="underline font-semibold text-[#2C3E50]">
+              @aurellecharmsss
+            </a>
+            .
           </p>
         </div>
 
-        {/* Success State Overlay or Form */}
         {isSuccess ? (
-          <div className="bg-[#FFFDF9] rounded-2xl p-10 sm:p-14 text-center border border-[#B8D4F0] shadow-soft-lg space-y-6 max-w-xl mx-auto animate-fade-in">
-            <CheckCircle2 className="w-16 h-16 text-[#6FA3EA] mx-auto" />
-            <h3 className="font-serif text-3xl text-[#2C3E50]">Request Received!</h3>
-            <p className="text-sm text-[#5C728A] leading-relaxed">
-              Thank you for sharing your design idea with AurelleCharmsss. Our team will review your customization request and reach out to you via Instagram DM or Email within 24 hours.
+          <div className="bg-[#FFFDF9] rounded-2xl p-10 sm:p-14 text-center border border-[#B8D4F0] shadow-soft-lg space-y-5 max-w-xl mx-auto">
+            <CheckCircle2 className="w-14 h-14 text-[#6FA3EA] mx-auto" />
+            <h3 className="font-serif text-3xl text-[#2C3E50]">Request received</h3>
+            <p className="text-sm text-[#4A607A] leading-relaxed">
+              Thank you for sharing your idea. We&apos;ll review it and reach out over Instagram DM
+              or email, usually within a day.
             </p>
             <button
               onClick={() => setIsSuccess(false)}
               className="text-xs font-semibold tracking-widest uppercase px-8 py-3.5 rounded-full bg-[#4A607A] text-white hover:bg-[#2C3E50] transition-colors"
             >
-              SUBMIT ANOTHER REQUEST
+              Send another request
             </button>
           </div>
         ) : (
@@ -101,120 +90,86 @@ export default function CustomRequestSection() {
             )}
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {/* Name */}
               <div>
-                <label className="block text-xs font-semibold tracking-wider text-[#4A607A] uppercase mb-2">
-                  Full Name *
-                </label>
+                <label htmlFor="cr-name" className={LABEL}>Full name *</label>
                 <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  placeholder="e.g. Ananya Sharma"
-                  className="w-full px-4 py-3 rounded-xl bg-[#FAF7F2] border border-[#EBE3D5] text-sm text-[#2C3E50] focus:outline-none focus:border-[#B8D4F0] transition-colors"
-                  required
+                  id="cr-name" name="name" type="text" required
+                  value={formData.name} onChange={handleChange}
+                  placeholder="e.g. Ananya Sharma" className={FIELD}
                 />
               </div>
-
-              {/* Instagram Handle / Phone */}
               <div>
-                <label className="block text-xs font-semibold tracking-wider text-[#4A607A] uppercase mb-2">
-                  Instagram Handle / Phone *
-                </label>
+                <label htmlFor="cr-phone" className={LABEL}>Instagram handle / phone *</label>
                 <input
-                  type="text"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  placeholder="e.g. @your_insta_handle"
-                  className="w-full px-4 py-3 rounded-xl bg-[#FAF7F2] border border-[#EBE3D5] text-sm text-[#2C3E50] focus:outline-none focus:border-[#B8D4F0] transition-colors"
-                  required
+                  id="cr-phone" name="phone" type="text" required
+                  value={formData.phone} onChange={handleChange}
+                  placeholder="e.g. @your_insta_handle" className={FIELD}
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {/* Email */}
               <div>
-                <label className="block text-xs font-semibold tracking-wider text-[#4A607A] uppercase mb-2">
-                  Email Address *
-                </label>
+                <label htmlFor="cr-email" className={LABEL}>Email address *</label>
                 <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="e.g. ananya@example.com"
-                  className="w-full px-4 py-3 rounded-xl bg-[#FAF7F2] border border-[#EBE3D5] text-sm text-[#2C3E50] focus:outline-none focus:border-[#B8D4F0] transition-colors"
-                  required
+                  id="cr-email" name="email" type="email" required
+                  value={formData.email} onChange={handleChange}
+                  placeholder="e.g. ananya@example.com" className={FIELD}
                 />
               </div>
-
-              {/* Product Category */}
               <div>
-                <label className="block text-xs font-semibold tracking-wider text-[#4A607A] uppercase mb-2">
-                  Product Type / Category *
-                </label>
+                <label htmlFor="cr-category" className={LABEL}>Product type *</label>
                 <select
-                  name="category"
-                  value={formData.category}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-xl bg-[#FAF7F2] border border-[#EBE3D5] text-sm text-[#2C3E50] focus:outline-none focus:border-[#B8D4F0] transition-colors"
+                  id="cr-category" name="category"
+                  value={formData.category} onChange={handleChange} className={FIELD}
                 >
-                  <option value="Bracelets">Custom Bracelet</option>
-                  <option value="Keychains">Custom Keychain</option>
-                  <option value="Mobile Keychains">Mobile Phone Charm</option>
-                  <option value="Combo Set">Custom Gift Bundle</option>
+                  <option value="Bracelets">Custom bracelet</option>
+                  <option value="Keychains">Custom keychain</option>
+                  <option value="Mobile Keychains">Mobile phone charm</option>
+                  <option value="Combo Set">Custom gift bundle</option>
                 </select>
               </div>
             </div>
 
-            {/* Customization Request */}
             <div>
-              <label className="block text-xs font-semibold tracking-wider text-[#4A607A] uppercase mb-2">
-                Customization Request *
-              </label>
+              <label htmlFor="cr-request" className={LABEL}>Your idea *</label>
               <textarea
-                name="request"
-                rows="3"
-                value={formData.request}
-                onChange={handleChange}
-                placeholder="Describe your design (colors, bead style, charms, initial letters, or specific theme)..."
-                className="w-full px-4 py-3 rounded-xl bg-[#FAF7F2] border border-[#EBE3D5] text-sm text-[#2C3E50] focus:outline-none focus:border-[#B8D4F0] transition-colors"
-                required
+                id="cr-request" name="request" rows="3" required
+                value={formData.request} onChange={handleChange} className={FIELD}
+                placeholder="Colours, bead style, charms, initials, or a theme you'd like."
               />
             </div>
 
-            {/* Additional Message */}
             <div>
-              <label className="block text-xs font-semibold tracking-wider text-[#4A607A] uppercase mb-2">
-                Additional Message (Optional)
-              </label>
+              <label htmlFor="cr-message" className={LABEL}>Anything else (optional)</label>
               <input
-                type="text"
-                name="message"
-                value={formData.message}
-                onChange={handleChange}
-                placeholder="Any special date, gift notes, or packaging requirements..."
-                className="w-full px-4 py-3 rounded-xl bg-[#FAF7F2] border border-[#EBE3D5] text-sm text-[#2C3E50] focus:outline-none focus:border-[#B8D4F0] transition-colors"
+                id="cr-message" name="message" type="text"
+                value={formData.message} onChange={handleChange} className={FIELD}
+                placeholder="A date to hit, gift notes, packaging requests…"
               />
             </div>
 
-            {/* Submit Button */}
-            <div className="pt-4 text-center">
+            <div className="pt-2 text-center">
               <button
                 type="submit"
                 disabled={loading}
-                className="group inline-flex items-center text-xs tracking-widest uppercase font-semibold text-white bg-[#4A607A] hover:bg-[#2C3E50] px-10 py-4 rounded-full shadow-soft hover:shadow-soft-lg transition-all duration-300 disabled:opacity-50"
+                className="group inline-flex items-center text-xs tracking-widest uppercase font-semibold text-white bg-[#4A607A] hover:bg-[#2C3E50] px-10 py-4 rounded-full shadow-soft hover:shadow-soft-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <span>{loading ? 'SENDING REQUEST...' : 'SEND REQUEST'}</span>
-                <Send className="w-4 h-4 ml-3 group-hover:translate-x-1 transition-transform" />
+                <span>{loading ? 'Sending…' : 'Send request'}</span>
+                <Send className="w-4 h-4 ml-3 transition-transform group-hover:translate-x-1" />
               </button>
+              <p className="mt-4 text-xs text-[#4A607A]">
+                Prefer to chat?{' '}
+                <a
+                  href={INSTAGRAM_URL} target="_blank" rel="noreferrer"
+                  className="inline-flex items-center gap-1 underline font-semibold text-[#2C3E50]"
+                >
+                  <Instagram className="w-3.5 h-3.5" /> DM @aurellecharmsss
+                </a>
+              </p>
             </div>
           </form>
         )}
-
       </div>
     </section>
   );

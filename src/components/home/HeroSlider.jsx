@@ -1,186 +1,122 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
+import React from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
+import { ArrowRight, ChevronDown } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
+/* Art-directed to /hero/heroImage.png (cool teal landscape, warm gold jewellery)
+   rather than to the cream page shell. Colours are sampled from the photograph;
+   contrast is measured against the pale mist inside its safe zone — #073B4C ink
+   7.6:1, #285563 support 5.2:1. Gold (#C99A3D) only ever appears as a background
+   under dark teal; as text on the mist it lands at 1.6:1.
+
+   The photograph is a fixed 16:9 composition: keychains framing both corners, a
+   clean centre column at x 35–65%. Cropping it to a portrait viewport throws the
+   jewellery away, so below `sm` the image keeps its full aspect and the copy
+   drops beneath it instead of overlaying. */
+
+// Exponential ease-out. No bounce.
+const EASE = [0.16, 1, 0.3, 1];
+
 export default function HeroSlider() {
-  const [currentSlide, setCurrentSlide] = useState(0);
   const navigate = useNavigate();
+  const reduce = useReducedMotion();
 
-  const slides = [
-    {
-      id: 1,
-      category: 'Bracelets',
-      headline: 'UNMATCHED BEAUTY',
-      subtitle: 'Handmade with love, designed to shine. Bracelets, keychains & more — just for you.',
-      ctaText: 'EXPLORE COLLECTION',
-      link: '/collections?category=Bracelets',
-      // Woman's wrist with stacked beaded bracelets, soft blue bg — matches reference
-      image: 'https://images.unsplash.com/photo-1603561591411-07134e71a2a9?w=1200&auto=format&fit=crop&q=85',
-    },
-    {
-      id: 2,
-      category: 'Keychains',
-      headline: 'LITTLE THINGS, BIG CHARM',
-      subtitle: 'Handcrafted keychains full of colour, love and personality.',
-      ctaText: 'SHOP KEYCHAINS',
-      link: '/collections?category=Keychains',
-      // Colourful beads and jewellery accessories on soft cream surface
-      image: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=1200&auto=format&fit=crop&q=85',
-    },
-    {
-      id: 3,
-      category: 'Mobile Keychains',
-      headline: 'CHARM YOUR EVERYDAY',
-      subtitle: 'Personalised phone charms handmade for the things you carry closest.',
-      ctaText: 'DISCOVER MORE',
-      link: '/collections?category=Mobile%20Keychains',
-      // Hand holding phone with charm / jewelry accessories, soft aesthetic
-      image: 'https://images.unsplash.com/photo-1573408301185-9519f94816b5?w=1200&auto=format&fit=crop&q=85',
-    },
-  ];
-
-
-  // Auto-advance every 3 seconds (fast-ish like 1 s visible transition)
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 3000);
-    return () => clearInterval(timer);
-  }, [slides.length]);
-
-  const handlePrev = () => setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
-  const handleNext = () => setCurrentSlide((prev) => (prev + 1) % slides.length);
+  // One orchestrated page-load: everything rises out of the mist, staggered.
+  const rise = (delay) => ({
+    initial: reduce ? { opacity: 0 } : { opacity: 0, y: 26 },
+    animate: { opacity: 1, y: 0 },
+    transition: { delay: reduce ? 0 : delay, duration: reduce ? 0.2 : 0.85, ease: EASE },
+  });
 
   return (
-    <section className="relative w-full h-[75vh] sm:h-[82vh] min-h-[480px] sm:min-h-[580px] max-h-[850px] overflow-hidden">
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={currentSlide}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.6, ease: 'easeInOut' }}
-          className="absolute inset-0 w-full h-full"
+    <section className="relative w-full bg-[#FAF7F2] lg:aspect-[16/9] lg:max-h-[860px]">
+      {/* The photograph IS the design — no panel, no wash across the centre.
+          scale 1.02 crops the encoder fringing on the source file's edges. */}
+      <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#8FD8EE] lg:absolute lg:inset-0 lg:aspect-auto lg:h-full">
+        <motion.img
+          src="/hero/heroImage.png"
+          alt="Two handmade black-and-gold anime charm keychains hanging over a misty mountain valley"
+          fetchPriority="high"
+          decoding="async"
+          initial={{ scale: reduce ? 1.02 : 1.08 }}
+          animate={{ scale: 1.02 }}
+          transition={{ duration: reduce ? 0 : 6, ease: EASE }}
+          className="h-full w-full object-cover object-center"
+        />
+        {/* The scene's own haze, thickened just enough to carry body copy over the
+            mountain ridges that reach into the safe zone. Not a panel: it is fully
+            transparent long before either keychain, and only exists in overlay mode. */}
+        <div
+          className="pointer-events-none absolute inset-0 hidden lg:block"
+          style={{
+            background:
+              'radial-gradient(ellipse 42% 46% at 50% 47%, rgba(255,255,255,0.46) 0%, rgba(255,255,255,0.38) 55%, rgba(255,255,255,0) 100%)',
+          }}
+        />
+        {/* Settles the grass edge into the cream page below. */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-10 bg-gradient-to-b from-transparent to-[#FAF7F2] lg:h-24" />
+      </div>
+
+      {/* Desktop: centred in the image's own safe zone, slightly above the middle,
+          never overlapping either keychain. Mobile: directly beneath it. */}
+      <div className="relative z-10 flex flex-col items-center px-6 pb-10 pt-10 text-center lg:h-full lg:justify-center lg:pb-[7%] lg:pt-0">
+        <motion.h1
+          {...rise(0.15)}
+          className="max-w-[15ch] text-balance lg:max-w-[36%] font-serif font-normal leading-[1.04] tracking-[-0.02em]
+                     text-[clamp(2.25rem,6.2vw,5.25rem)] text-[#073B4C]
+                     lg:[text-shadow:0_1px_3px_rgba(7,59,76,0.16)]"
         >
-          {/* Full-width background image */}
-          <motion.img
-            key={slides[currentSlide].image}
-            initial={{ scale: 1.04 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 3, ease: 'easeOut' }}
-            src={slides[currentSlide].image}
-            alt={slides[currentSlide].headline}
-            className="absolute inset-0 w-full h-full object-cover object-center"
-          />
+          Wear the <em className="italic">worlds</em> you love
+        </motion.h1>
 
-          {/* Left-side soft blue/cream overlay — matches the reference watercolor wash */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#D6E8F5]/92 via-[#EBF3FA]/75 sm:via-[#EBF3FA]/60 to-transparent" />
-          {/* Very subtle top/bottom vignette */}
-          <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-transparent to-white/20 pointer-events-none" />
+        <motion.p
+          {...rise(0.3)}
+          className="mt-5 max-w-[40ch] text-pretty lg:max-w-[34%] text-sm font-light leading-relaxed text-[#0B4652]
+                     lg:mt-6 lg:text-base lg:[text-shadow:0_1px_3px_rgba(7,59,76,0.14)]"
+        >
+          Handmade bracelets, keychains and phone charms — beaded one at a time,
+          for the characters and colours you carry everywhere.
+        </motion.p>
 
-          {/* Decorative star sparkle elements like the reference */}
-          <div className="absolute top-16 left-[38%] text-[#B8D4F0] text-2xl opacity-60 pointer-events-none select-none hidden sm:block">✦</div>
-          <div className="absolute top-28 left-[42%] text-[#B8D4F0] text-sm opacity-40 pointer-events-none select-none hidden sm:block">✦</div>
-          <div className="absolute bottom-24 left-[36%] text-[#B8D4F0] text-lg opacity-40 pointer-events-none select-none hidden sm:block">✦</div>
+        <motion.div {...rise(0.45)} className="mt-8 flex flex-wrap items-center justify-center gap-3 lg:mt-9 lg:gap-4">
+          <button
+            onClick={() => navigate('/collections')}
+            className="group inline-flex items-center rounded-full bg-[#084C5A] px-8 py-3.5 text-xs font-semibold
+                       uppercase tracking-widest text-[#FFF8E7] shadow-soft transition-colors duration-300
+                       hover:bg-[#C99A3D] hover:text-[#073B4C]"
+          >
+            Explore the collection
+            <ArrowRight className="ml-3 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1.5" />
+          </button>
 
-          {/* Text content — left side overlaid on the gradient */}
-          <div className="relative z-10 h-full flex flex-col justify-center px-6 sm:px-14 lg:px-20 max-w-xl">
-            <motion.span
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.15, duration: 0.5 }}
-              className="text-[10px] sm:text-xs font-semibold tracking-widest text-[#4A7FA5] uppercase mb-3 sm:mb-5"
-            >
-              AURELLECHARMSSS HANDMADE COLLECTION
-            </motion.span>
-
-            <motion.h1
-              initial={{ y: 25, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.22, duration: 0.55 }}
-              className="font-serif text-3xl sm:text-5xl lg:text-6xl text-[#2C4A6E] leading-[1.1] sm:leading-[1.05] font-normal tracking-wide mb-2"
-            >
-              {slides[currentSlide].headline}
-            </motion.h1>
-
-            {/* Heart divider like the reference */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.3, duration: 0.4 }}
-              className="flex items-center gap-3 my-4"
-            >
-              <div className="h-[1px] w-10 bg-[#B8D4F0]" />
-              <span className="text-[#B8D4F0] text-base">♡</span>
-              <div className="h-[1px] w-10 bg-[#B8D4F0]" />
-            </motion.div>
-
-            <motion.p
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.32, duration: 0.5 }}
-              className="text-sm sm:text-base text-[#4A607A] font-light leading-relaxed mb-8 max-w-sm"
-            >
-              {slides[currentSlide].subtitle}
-            </motion.p>
-
-            <motion.div
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.4, duration: 0.5 }}
-            >
-              <button
-                onClick={() => navigate(slides[currentSlide].link)}
-                className="group inline-flex items-center text-xs tracking-widest uppercase font-semibold text-white bg-[#4A7FA5] hover:bg-[#3A6A8E] px-8 py-3.5 rounded-full transition-all duration-300 shadow-md hover:shadow-lg"
-              >
-                <span>{slides[currentSlide].ctaText}</span>
-                <ArrowRight className="w-4 h-4 ml-3 group-hover:translate-x-1.5 transition-transform duration-300" />
-              </button>
-            </motion.div>
-          </div>
+          <a
+            href="#custom-orders"
+            className="inline-flex items-center rounded-full border border-[#073B4C]/40 px-8 py-3.5 text-xs
+                       font-semibold uppercase tracking-widest text-[#073B4C] transition-colors duration-300
+                       hover:bg-[#073B4C]/10"
+          >
+            Custom orders
+          </a>
         </motion.div>
-      </AnimatePresence>
-
-      {/* Slide Counter + Controls */}
-      <div className="absolute bottom-8 left-8 sm:left-12 lg:left-20 z-20 flex items-center space-x-6">
-        <span className="font-serif text-sm tracking-widest text-[#4A607A] font-semibold">
-          0{currentSlide + 1} <span className="text-[#94A3B8] font-sans text-xs">/ 0{slides.length}</span>
-        </span>
-
-        <div className="flex items-center space-x-2">
-          <button
-            onClick={handlePrev}
-            className="w-9 h-9 rounded-full bg-white/80 backdrop-blur-md flex items-center justify-center text-[#5C728A] hover:text-[#2C3E50] hover:bg-white border border-[#EBE3D5] transition-colors shadow-soft-sm"
-            aria-label="Previous Slide"
-          >
-            <ChevronLeft className="w-4 h-4" />
-          </button>
-          <button
-            onClick={handleNext}
-            className="w-9 h-9 rounded-full bg-white/80 backdrop-blur-md flex items-center justify-center text-[#5C728A] hover:text-[#2C3E50] hover:bg-white border border-[#EBE3D5] transition-colors shadow-soft-sm"
-            aria-label="Next Slide"
-          >
-            <ChevronRight className="w-4 h-4" />
-          </button>
-        </div>
       </div>
 
-      {/* Dot indicators */}
-      <div className="absolute bottom-9 right-8 sm:right-12 z-20 flex items-center space-x-2">
-        {slides.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => setCurrentSlide(i)}
-            className={`rounded-full transition-all duration-300 ${
-              i === currentSlide
-                ? 'w-6 h-2 bg-[#4A607A]'
-                : 'w-2 h-2 bg-[#B8D4F0] hover:bg-[#4A607A]/50'
-            }`}
-            aria-label={`Go to slide ${i + 1}`}
-          />
-        ))}
-      </div>
+      {/* A full-bleed hero hides the fold. Mobile doesn't need telling. */}
+      <motion.a
+        href="#featured"
+        aria-label="Scroll to the collection"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: reduce ? 0 : 1.1, duration: 0.6, ease: EASE }}
+        className="absolute inset-x-0 bottom-5 z-10 mx-auto hidden w-max items-center justify-center
+                   text-[#073B4C] opacity-70 transition-opacity hover:opacity-100 lg:flex"
+      >
+        <motion.span
+          animate={reduce ? undefined : { y: [0, 6, 0] }}
+          transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
+        >
+          <ChevronDown className="h-5 w-5" strokeWidth={1.5} />
+        </motion.span>
+      </motion.a>
     </section>
   );
 }

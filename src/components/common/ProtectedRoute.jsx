@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 export default function ProtectedRoute({ children, adminOnly = false }) {
-  const { user, isAdmin, loading } = useAuth();
+  const { user, isAdmin, loading, checked, ensureChecked } = useAuth();
 
-  if (loading) {
+  // The session is resolved on demand; this is the only public entry point to it.
+  useEffect(() => { ensureChecked(); }, [ensureChecked]);
+
+  if (!checked || loading) {
     return (
       <div className="py-24 bg-[#FAF7F2] min-h-screen flex items-center justify-center">
         <div className="text-center space-y-4">
@@ -16,7 +19,7 @@ export default function ProtectedRoute({ children, adminOnly = false }) {
     );
   }
 
-  if (!user && !isAdmin) {
+  if (!user) {
     return <Navigate to="/login" replace />;
   }
 

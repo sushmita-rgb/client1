@@ -1,16 +1,20 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { appwriteService } from '../services/appwriteService';
+import { useAuth } from './AuthContext';
 
 const RequestContext = createContext();
 
 export const RequestProvider = ({ children }) => {
+  const { isAdmin } = useAuth();
   const [requests, setRequests] = useState([]);
   const [inquiries, setInquiries] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
+  // Both collections are admin-read-only. Fetching them on every public page
+  // load cost two round-trips per visitor and always 401'd.
   useEffect(() => {
-    loadAllData();
-  }, []);
+    if (isAdmin) loadAllData();
+  }, [isAdmin]);
 
   const loadAllData = async () => {
     setLoading(true);
@@ -46,14 +50,6 @@ export const RequestProvider = ({ children }) => {
     return updated;
   };
 
-  const submitProductInquiry = async (inquiryData) => {
-    const newDoc = await appwriteService.createProductInquiry(inquiryData);
-    if (newDoc) {
-      setInquiries((prev) => [newDoc, ...prev]);
-    }
-    return newDoc;
-  };
-
   const updateInquiryStatus = async (id, status) => {
     const updated = await appwriteService.updateInquiryStatus(id, status);
     if (updated) {
@@ -80,7 +76,6 @@ export const RequestProvider = ({ children }) => {
         loading,
         submitCustomRequest,
         updateRequestStatus,
-        submitProductInquiry,
         updateInquiryStatus,
         deleteInquiry,
         loadAllData,

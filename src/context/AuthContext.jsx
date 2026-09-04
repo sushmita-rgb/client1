@@ -1,47 +1,42 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useCallback } from 'react';
 import { appwriteService } from '../services/appwriteService';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  // Public pages have no account features, so the session is resolved lazily —
+  // only ProtectedRoute and the login page ask for it. Checking on mount cost
+  // every anonymous visitor a 401 round-trip.
+  const [checked, setChecked] = useState(false);
 
-  useEffect(() => {
-    checkUser();
-  }, []);
-
-  const checkUser = async () => {
+  const checkUser = useCallback(async () => {
     setLoading(true);
     try {
-      const current = await appwriteService.getCurrentUser();
-      setUser(current);
-    } catch (e) {
+      setUser(await appwriteService.getCurrentUser());
+    } catch {
       setUser(null);
     } finally {
+      setChecked(true);
       setLoading(false);
     }
-  };
+  }, []);
+
+  const ensureChecked = useCallback(() => {
+    setChecked((done) => {
+      if (!done) checkUser();
+      return done;
+    });
+  }, [checkUser]);
 
   const login = async (email, password) => {
     setLoading(true);
     try {
-      const sessionUser = await appwriteService.login(email, password);
-      const currentUser = await appwriteService.getCurrentUser();
-      setUser(currentUser || sessionUser);
-      return currentUser || sessionUser;
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const signup = async (email, password, name) => {
-    setLoading(true);
-    try {
-      const sessionUser = await appwriteService.signup(email, password, name);
-      const currentUser = await appwriteService.getCurrentUser();
-      setUser(currentUser || sessionUser);
-      return currentUser || sessionUser;
+      const current = await appwriteService.login(email, password);
+      setUser(current);
+      setChecked(true);
+      return current;
     } finally {
       setLoading(false);
     }
@@ -62,11 +57,12 @@ export const AuthProvider = ({ children }) => {
       value={{
         user,
         loading,
+        checked,
         isAdmin: Boolean(user?.isAdmin),
         login,
-        signup,
         logout,
         checkUser,
+        ensureChecked,
       }}
     >
       {children}

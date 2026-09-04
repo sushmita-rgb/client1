@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import { isAppwriteConfigured } from '../../lib/appwrite';
+import { useProducts } from '../../context/ProductContext';
 import { Settings, ShieldCheck, Database, Key, CheckCircle2 } from 'lucide-react';
 
 export default function AdminSettingsPage() {
+  // Real diagnostic: reuse the products load the app already performed.
+  const { loading, error, products } = useProducts();
+
   const [saved, setSaved] = useState(false);
 
   return (
@@ -25,14 +28,18 @@ export default function AdminSettingsPage() {
             </h3>
             <p className="text-xs text-slate-500">Live connection diagnostic status</p>
           </div>
-          {isAppwriteConfigured() ? (
-            <span className="text-xs font-semibold px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full border border-emerald-200 flex items-center">
-              <CheckCircle2 className="w-3.5 h-3.5 mr-1" />
-              Connected to Appwrite Cloud
+          {loading ? (
+            <span className="text-xs font-semibold px-3 py-1 bg-slate-100 text-slate-600 rounded-full border border-slate-200">
+              Checking…
+            </span>
+          ) : error ? (
+            <span className="text-xs font-semibold px-3 py-1 bg-rose-50 text-rose-700 rounded-full border border-rose-200">
+              {error}
             </span>
           ) : (
-            <span className="text-xs font-semibold px-3 py-1 bg-blue-50 text-blue-700 rounded-full border border-blue-200">
-              Running with Local Persistence Wrapper
+            <span className="text-xs font-semibold px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full border border-emerald-200 flex items-center">
+              <CheckCircle2 className="w-3.5 h-3.5 mr-1" />
+              Connected — {products.length} product{products.length === 1 ? '' : 's'}
             </span>
           )}
         </div>

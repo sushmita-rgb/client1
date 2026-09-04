@@ -45,7 +45,6 @@ export default function ProductGrid() {
             <option value="newest">Newest Arrivals</option>
             <option value="price-asc">Price: Low to High</option>
             <option value="price-desc">Price: High to Low</option>
-            <option value="views">Most Viewed</option>
           </select>
         </div>
       </div>

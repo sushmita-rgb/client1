@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useProducts } from '../context/ProductContext';
-import { useRequests } from '../context/RequestContext';
-import { useAuth } from '../context/AuthContext';
 import RelatedProducts from '../components/products/RelatedProducts';
-import { Check, ShieldCheck, Heart, Sparkles, Phone, ArrowLeft, Eye, Instagram } from 'lucide-react';
+import { Check, ShieldCheck, Heart, Sparkles, ArrowLeft, Instagram } from 'lucide-react';
 
 const categoryBg = {
   'Bracelets':        'from-[#EBF3FA] via-[#F4EFE6] to-[#FAF7F2]',
@@ -15,27 +13,10 @@ const categoryBg = {
 
 export default function ProductDetailPage() {
   const { id } = useParams();
-  const { getProduct, incrementViews } = useProducts();
-  const { submitProductInquiry } = useRequests();
-  const { user } = useAuth();
+  const { getProduct } = useProducts();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState('');
-  const [inquirySent, setInquirySent] = useState(false);
-
-  const handleInquiryClick = () => {
-    setInquirySent(true);
-    if (product) {
-      submitProductInquiry({
-        productId: product.$id || product.id,
-        productName: product.name,
-        productImage: product.imageUrl,
-        productPrice: product.price,
-        userName: user ? (user.name || user.email) : 'Guest Visitor',
-        userEmail: user ? user.email : 'Not Logged In',
-      });
-    }
-  };
 
   useEffect(() => {
     loadProduct();
@@ -48,8 +29,6 @@ export default function ProductDetailPage() {
       setProduct(data);
       if (data) {
         setSelectedImage(data.imageUrl);
-        // Increment view count dynamically in Appwrite backend
-        await incrementViews(data.$id || data.id);
       }
     } catch (e) {
       console.error('Error fetching product details:', e);
@@ -118,10 +97,6 @@ export default function ProductDetailPage() {
                 alt={product.name}
                 className="w-4/5 h-4/5 object-contain drop-shadow-2xl transition-all duration-300"
               />
-              <span className="absolute bottom-4 right-4 bg-white/80 backdrop-blur-md px-3 py-1 rounded-full text-[11px] font-semibold text-[#4A607A] border border-[#EBE3D5] flex items-center shadow-soft-sm">
-                <Eye className="w-3.5 h-3.5 mr-1.5" />
-                {product.views || 0} VIEWS
-              </span>
             </div>
 
             {/* Thumbnail */}
@@ -190,34 +165,17 @@ export default function ProductDetailPage() {
               </ul>
             </div>
 
-            {/* Actions: Instagram Inquiry / Order */}
-            <div className="border-t border-[#FAF7F2] pt-6 space-y-3">
-              {inquirySent ? (
-                <div className="p-4 rounded-xl bg-[#EBF3FA] border border-[#B8D4F0] text-[#4A607A] text-xs font-semibold text-center space-y-2">
-                  <p>✨ Inquiry started! Connect with us directly on Instagram @aurellecharmsss.</p>
-                  <a
-                    href="https://instagram.com/aurellecharmsss"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-block text-[11px] font-bold text-[#2C3E50] underline uppercase"
-                  >
-                    Open Instagram (@aurellecharmsss)
-                  </a>
-                </div>
-              ) : (
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <a
-                    href="https://instagram.com/aurellecharmsss"
-                    target="_blank"
-                    rel="noreferrer"
-                    onClick={handleInquiryClick}
-                    className="flex-1 inline-flex items-center justify-center text-[11px] sm:text-xs tracking-wider sm:tracking-widest uppercase font-semibold text-white bg-[#4A607A] hover:bg-[#2C3E50] py-3.5 px-4 sm:px-6 rounded-full shadow-soft hover:shadow-soft-lg transition-all duration-300 text-center gap-2"
-                  >
-                    <Instagram className="w-4 h-4 shrink-0" />
-                    <span>INQUIRE / ORDER ON INSTAGRAM (@aurellecharmsss)</span>
-                  </a>
-                </div>
-              )}
+            {/* Ordering happens in Instagram DMs — nothing is recorded here. */}
+            <div className="border-t border-[#FAF7F2] pt-6">
+              <a
+                href="https://instagram.com/aurellecharmsss"
+                target="_blank"
+                rel="noreferrer"
+                className="w-full inline-flex items-center justify-center gap-2 text-[11px] sm:text-xs tracking-wider sm:tracking-widest uppercase font-semibold text-white bg-[#4A607A] hover:bg-[#2C3E50] py-3.5 px-4 sm:px-6 rounded-full shadow-soft hover:shadow-soft-lg transition-all duration-300 text-center"
+              >
+                <Instagram className="w-4 h-4 shrink-0" />
+                <span>Order on Instagram (@aurellecharmsss)</span>
+              </a>
             </div>
 
             {/* Shipping & Guarantee Notes */}

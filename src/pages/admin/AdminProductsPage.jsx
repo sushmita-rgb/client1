@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useProducts } from '../../context/ProductContext';
 import ProductModal from '../../components/admin/ProductModal';
-import { Plus, Edit, Trash2, Search, Eye, AlertTriangle } from 'lucide-react';
+import { Plus, Edit, Trash2, Search, AlertTriangle } from 'lucide-react';
 
 export default function AdminProductsPage() {
   const { products, deleteProduct } = useProducts();
+  const [deleteError, setDeleteError] = React.useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
@@ -27,9 +28,14 @@ export default function AdminProductsPage() {
   };
 
   const handleDeleteConfirm = async () => {
-    if (deletingId) {
+    if (!deletingId) return;
+    setDeleteError('');
+    try {
       await deleteProduct(deletingId);
       setDeletingId(null);
+    } catch (err) {
+      // Writes throw now; without this the dialog closed as if the delete worked.
+      setDeleteError(err?.message || 'Failed to delete product.');
     }
   };
 
@@ -82,7 +88,6 @@ export default function AdminProductsPage() {
                 <th className="py-3.5 px-6">Product</th>
                 <th className="py-3.5 px-4">Category</th>
                 <th className="py-3.5 px-4">Price</th>
-                <th className="py-3.5 px-4">Views</th>
                 <th className="py-3.5 px-4">Status</th>
                 <th className="py-3.5 px-4">Created Date</th>
                 <th className="py-3.5 px-6 text-right">Actions</th>
@@ -125,13 +130,6 @@ export default function AdminProductsPage() {
                       ₹{prod.price}
                     </td>
 
-                    {/* Views */}
-                    <td className="py-3 px-4 text-slate-600 font-medium">
-                      <div className="flex items-center space-x-1">
-                        <Eye className="w-3.5 h-3.5 text-slate-400" />
-                        <span>{prod.views || 0}</span>
-                      </div>
-                    </td>
 
                     {/* Status */}
                     <td className="py-3 px-4">
@@ -204,9 +202,14 @@ export default function AdminProductsPage() {
             <p className="text-xs text-slate-500">
               This will permanently delete the item document from Appwrite Database and clean up associated image storage.
             </p>
+            {deleteError && (
+              <p className="text-xs text-rose-700 bg-rose-50 border border-rose-200 rounded-xl px-3 py-2">
+                {deleteError}
+              </p>
+            )}
             <div className="flex items-center space-x-3 pt-2">
               <button
-                onClick={() => setDeletingId(null)}
+                onClick={() => { setDeletingId(null); setDeleteError(''); }}
                 className="flex-1 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50"
               >
                 Cancel

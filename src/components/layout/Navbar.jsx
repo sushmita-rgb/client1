@@ -25,10 +25,10 @@ export default function Navbar() {
   return (
     <>
       <header className="sticky top-0 z-40 w-full glass-nav transition-all duration-300">
-        {/* Top announcement bar */}
+        {/* Top announcement bar
         <div className="bg-[#EBF3FA] py-1.5 px-2 sm:px-4 text-center text-[10px] sm:text-xs tracking-wider text-[#4A607A] font-medium border-b border-[#D0E2F3] truncate">
           ✨ FREE SHIPPING ON ORDERS OVER ₹999 &nbsp;|&nbsp; HANDCRAFTED WITH LOVE
-        </div>
+        </div> */}
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header Bar: Flex Far Left (Brand) | Center (Nav) | Far Right (Actions) */}
@@ -122,23 +122,7 @@ export default function Navbar() {
                     </div>
                   </div>
                 </div>
-              ) : (
-                <div className="hidden sm:flex items-center space-x-3">
-                  <Link
-                    to="/login"
-                    className="text-xs tracking-widest font-semibold text-[#5C728A] hover:text-[#2C3E50] transition-colors uppercase px-2 py-1"
-                  >
-                    Login
-                  </Link>
-                  <span className="text-[#EBE3D5]">|</span>
-                  <Link
-                    to="/signup"
-                    className="text-xs tracking-widest font-semibold text-[#2C3E50] bg-[#FAF7F2] hover:bg-[#EBF3FA] border border-[#D4E4F7] px-4 py-2 rounded-full transition-colors shadow-soft-sm uppercase"
-                  >
-                    Sign Up
-                  </Link>
-                </div>
-              )}
+              ) : null}
 
               {/* Mobile Hamburger */}
               <button
@@ -199,24 +183,7 @@ export default function Navbar() {
                   Logout
                 </button>
               </div>
-            ) : (
-              <div className="pt-2 flex gap-3">
-                <Link
-                  to="/login"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="flex-1 text-center text-xs font-semibold py-2.5 rounded-full border border-[#D4E4F7] text-[#5C728A] uppercase tracking-widest"
-                >
-                  Login
-                </Link>
-                <Link
-                  to="/signup"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="flex-1 text-center text-xs font-semibold py-2.5 rounded-full bg-[#2C3E50] text-white uppercase tracking-widest"
-                >
-                  Sign Up
-                </Link>
-              </div>
-            )}
+            ) : null}
           </div>
         )}
       </header>

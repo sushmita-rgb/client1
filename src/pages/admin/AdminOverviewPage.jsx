@@ -2,15 +2,14 @@ import React from 'react';
 import { useProducts } from '../../context/ProductContext';
 import { useRequests } from '../../context/RequestContext';
 import StatCard from '../../components/admin/StatCard';
-import AnalyticsCharts from '../../components/admin/AnalyticsCharts';
-import { Package, Eye, MessageSquareHeart, Award, Plus, ArrowRight } from 'lucide-react';
+import { Package, MessageSquareHeart, PackageX, Plus, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export default function AdminOverviewPage() {
-  const { products, mostViewedProduct } = useProducts();
+  const { products } = useProducts();
   const { requests } = useRequests();
 
-  const totalViews = products.reduce((acc, p) => acc + (p.views || 0), 0);
+  const outOfStock = products.filter((p) => !p.available).length;
 
   return (
     <div className="space-y-6 sm:space-y-8 max-w-full overflow-x-hidden">
@@ -36,21 +35,13 @@ export default function AdminOverviewPage() {
       </div>
 
       {/* 4 Stat Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <StatCard
           title="TOTAL PRODUCTS"
           value={products.length}
           subtitle="Active items in catalog"
           icon={Package}
           color="blue"
-        />
-
-        <StatCard
-          title="TOTAL PRODUCT VIEWS"
-          value={totalViews.toLocaleString()}
-          subtitle="Cumulative storefront views"
-          icon={Eye}
-          color="amber"
         />
 
         <StatCard
@@ -62,16 +53,13 @@ export default function AdminOverviewPage() {
         />
 
         <StatCard
-          title="MOST VIEWED PRODUCT"
-          value={mostViewedProduct ? mostViewedProduct.name : 'N/A'}
-          subtitle={mostViewedProduct ? `${mostViewedProduct.views || 0} views` : ''}
-          icon={Award}
-          color="purple"
+          title="OUT OF STOCK"
+          value={outOfStock}
+          subtitle="Items marked unavailable"
+          icon={PackageX}
+          color="amber"
         />
       </div>
-
-      {/* Analytics Charts Section */}
-      <AnalyticsCharts />
 
       {/* Quick Action Tables Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pt-4">
@@ -141,8 +129,8 @@ export default function AdminOverviewPage() {
                     <p className="text-xs text-slate-400">₹{prod.price} • {prod.category}</p>
                   </div>
                 </div>
-                <span className="text-xs font-semibold text-slate-600">
-                  {prod.views || 0} views
+                <span className={`text-xs font-semibold ${prod.available ? 'text-emerald-600' : 'text-rose-600'}`}>
+                  {prod.available ? 'In stock' : 'Out of stock'}
                 </span>
               </div>
             ))}

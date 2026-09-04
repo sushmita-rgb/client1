@@ -88,7 +88,7 @@ export default function ProductModal({ isOpen, onClose, editProductData = null }
       }
       onClose();
     } catch (err) {
-      setError('Failed to save product. Please check your network and Appwrite setup.');
+      setError(err?.message || 'Failed to save product.');
     } finally {
       setLoading(false);
     }

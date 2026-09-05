@@ -1,28 +1,16 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { ProductProvider } from './context/ProductContext';
 import { RequestProvider } from './context/RequestContext';
 
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 
-// Storefront Pages
 import HomePage from './pages/HomePage';
 import CollectionsPage from './pages/CollectionsPage';
 import ProductDetailPage from './pages/ProductDetailPage';
 import AboutPage from './pages/AboutPage';
-import LoginPage from './pages/LoginPage';
-
-// Admin Components & Pages
-import ProtectedRoute from './components/common/ProtectedRoute';
-import AdminLayout from './components/admin/AdminLayout';
-import AdminOverviewPage from './pages/admin/AdminOverviewPage';
-import AdminProductsPage from './pages/admin/AdminProductsPage';
-import AdminCategoriesPage from './pages/admin/AdminCategoriesPage';
-import AdminRequestsPage from './pages/admin/AdminRequestsPage';
-import AdminInquiriesPage from './pages/admin/AdminInquiriesPage';
-import AdminSettingsPage from './pages/admin/AdminSettingsPage';
+import NotFoundPage from './pages/NotFoundPage';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -32,57 +20,29 @@ function ScrollToTop() {
   return null;
 }
 
-function MainLayout() {
-  const location = useLocation();
-  const isAdminRoute = location.pathname.startsWith('/admin');
-
-  if (isAdminRoute) {
-    return (
-      <ProtectedRoute adminOnly={true}>
-        <AdminLayout>
-          <Routes>
-            <Route path="/admin" element={<AdminOverviewPage />} />
-            <Route path="/admin/products" element={<AdminProductsPage />} />
-            <Route path="/admin/categories" element={<AdminCategoriesPage />} />
-            <Route path="/admin/requests" element={<AdminRequestsPage />} />
-            <Route path="/admin/inquiries" element={<AdminInquiriesPage />} />
-            <Route path="/admin/settings" element={<AdminSettingsPage />} />
-          </Routes>
-        </AdminLayout>
-      </ProtectedRoute>
-    );
-  }
-
-  return (
-    <div className="flex flex-col min-h-screen">
-      <Navbar />
-      <main className="flex-1">
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/collections" element={<CollectionsPage />} />
-          <Route path="/product/:id" element={<ProductDetailPage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          {/* /signup is gone; catch stale links instead of rendering an empty page */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </main>
-      <Footer />
-    </div>
-  );
-}
-
+// Storefront only. The admin dashboard and its login now live in the separate
+// /dashboard app, so there is no auth in this build.
 export default function App() {
   return (
-    <AuthProvider>
-      <ProductProvider>
-        <RequestProvider>
-          <Router>
-            <ScrollToTop />
-            <MainLayout />
-          </Router>
-        </RequestProvider>
-      </ProductProvider>
-    </AuthProvider>
+    <ProductProvider>
+      <RequestProvider>
+        <Router>
+          <ScrollToTop />
+          <div className="flex flex-col min-h-screen">
+            <Navbar />
+            <main className="flex-1">
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/collections" element={<CollectionsPage />} />
+                <Route path="/product/:id" element={<ProductDetailPage />} />
+                <Route path="/about" element={<AboutPage />} />
+                <Route path="*" element={<NotFoundPage />} />
+              </Routes>
+            </main>
+            <Footer />
+          </div>
+        </Router>
+      </RequestProvider>
+    </ProductProvider>
   );
 }

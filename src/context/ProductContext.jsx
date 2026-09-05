@@ -43,32 +43,6 @@ export const ProductProvider = ({ children }) => {
     return await appwriteService.getProductById(id);
   };
 
-  const addProduct = async (productData, imageFile) => {
-    const newDoc = await appwriteService.createProduct(productData, imageFile);
-    if (newDoc) {
-      setProducts((prev) => [newDoc, ...prev]);
-    }
-    return newDoc;
-  };
-
-  const editProduct = async (id, productData, newImageFile) => {
-    const updated = await appwriteService.updateProduct(id, productData, newImageFile);
-    if (updated) {
-      setProducts((prev) =>
-        prev.map((p) => ((p.$id === id || p.id === id) ? updated : p))
-      );
-    }
-    return updated;
-  };
-
-  const deleteProduct = async (id, imageId) => {
-    const success = await appwriteService.deleteProduct(id, imageId);
-    if (success) {
-      setProducts((prev) => prev.filter((p) => p.$id !== id && p.id !== id));
-    }
-    return success;
-  };
-
   // Filtered & Sorted Products calculation
   const filteredProducts = useMemo(() => {
     let list = [...products];
@@ -129,12 +103,8 @@ export const ProductProvider = ({ children }) => {
         maxPriceFilter,
         setMaxPriceFilter,
         categories,
-        setCategories,
         loadProducts,
         getProduct,
-        addProduct,
-        editProduct,
-        deleteProduct,
       }}
     >
       {children}
